@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+  <title>SuperApp · Rodrigo Coelho</title>
+  <link rel="manifest" href="/manifest.json"/>
+  <meta name="theme-color" content="#080b14"/>
+  <meta name="mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+  <meta name="apple-mobile-web-app-title" content="SuperApp"/>
+  <link rel="apple-touch-icon" href="/icon-192-v2.png"/>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg"/>
+  <link rel="icon" type="image/png" sizes="192x192" href="/icon-192-v2.png"/>
+  <link rel="icon" type="image/png" sizes="512x512" href="/icon-512-v2.png"/>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --bg:       #080b14;
+      --bg2:      #0d1120;
+      --glass:    rgba(255,255,255,0.04);
+      --glass2:   rgba(255,255,255,0.08);
+      --border:   rgba(255,255,255,0.08);
+      --border2:  rgba(255,255,255,0.14);
+      --text:     #f0f4ff;
+      --muted:    #6b7a99;
+      --muted2:   #8892aa;
+      --accent:   #4f8ef7;
+      --accent2:  #7c3aed;
+      --green:    #22c55e;
+      --amber:    #f59e0b;
+      --safe-top: env(safe-area-inset-top,0px);
+      --safe-bot: env(safe-area-inset-bottom,0px);
+    }
+
+    html,body{
+      min-height:100dvh;
+      background:var(--bg);
+      color:var(--text);
+      font-family:'Inter',system-ui,sans-serif;
+      -webkit-font-smoothing:antialiased;
+      overflow-x:hidden;
+    }
+
+    /* ── BACKGROUND ORBS ──────────────────────────── */
+    .orbs{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+    .orb{position:absolute;border-radius:50%;filter:blur(80px);opacity:.18}
+    .orb1{width:400px;height:400px;background:#4f8ef7;top:-100px;right:-80px}
+    .orb2{width:300px;height:300px;background:#7c3aed;bottom:200px;left:-80px}
+    .orb3{width:200px;height:200px;background:#06b6d4;bottom:400px;right:50px}
+
+    /* ── SCROLL CONTAINER ─────────────────────────── */
+    #app{
+      position:relative;z-index:1;
+      padding-bottom:calc(90px + var(--safe-bot));
+    }
+
+    /* ── HEADER ───────────────────────────────────── */
+    .header{
+      padding:calc(20px + var(--safe-top)) 22px 16px;
+      display:flex;align-items:flex-start;justify-content:space-between;
+    }
+    .header-eyebrow{
+      font-size:.72rem;font-weight:500;letter-spacing:.08em;
+      text-transform:uppercase;color:var(--muted2);margin-bottom:4px;
+    }
+    .header-title{
+      font-size:1.75rem;font-weight:800;letter-spacing:-.03em;
+      background:linear-gradient(135deg,#f0f4ff 30%,#a5b4fc);
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+      background-clip:text;
+    }
+    .header-sub{
+      font-size:.78rem;color:var(--muted2);margin-top:4px;font-weight:500;
+    }
+
+    .avatar-btn{
+      width:44px;height:44px;border-radius:50%;
+      background:linear-gradient(135deg,#4f8ef7,#7c3aed);
+      display:flex;align-items:center;justify-content:center;
+      font-size:.85rem;font-weight:800;color:#fff;
+      border:2px solid rgba(255,255,255,.15);
+      cursor:pointer;flex-shrink:0;margin-top:4px;
+      box-shadow:0 4px 20px rgba(79,142,247,.3);
+      transition:transform .15s;
+    }
+    .avatar-btn:active{transform:scale(.92)}
+
+    /* ── SEARCH ───────────────────────────────────── */
+    .search{margin:4px 22px 20px;position:relative}
+    .search input{
+      width:100%;
+      background:var(--glass2);
+      border:1px solid var(--border2);
+      border-radius:16px;
+      padding:14px 18px 14px 46px;
+      color:var(--text);font-size:.9rem;font-weight:400;
+      outline:none;-webkit-appearance:none;
+      backdrop-filter:blur(12px);
+      transition:border-color .2s,background .2s;
+    }
+    .search input:focus{
+      border-color:rgba(79,142,247,.5);
+      background:rgba(255,255,255,.07);
+    }
+    .search input::placeholder{color:var(--muted)}
+    .search-icon{
+      position:absolute;left:15px;top:50%;transform:translateY(-50%);
+      color:var(--muted);pointer-events:none;
+    }
+
+    /* ── CATEGORIES ───────────────────────────────── */
+    .cats-wrap{overflow-x:auto;scrollbar-width:none;padding:0 22px 2px}
+    .cats-wrap::-webkit-scrollbar{display:none}
+    .cats{display:flex;gap:8px;width:max-content}
+
+    .cat-pill{
+      display:flex;align-items:center;gap:7px;
+      padding:8px 14px;border-radius:99px;
+      border:1px solid var(--border);
+      background:var(--glass);
+      cursor:pointer;-webkit-tap-highlight-color:transparent;
+      font-size:.78rem;font-weight:600;color:var(--muted2);
+      white-space:nowrap;transition:all .2s;
+    }
+    .cat-pill .e{font-size:.95rem}
+    .cat-pill.active{
+      background:rgba(79,142,247,.15);
+      border-color:rgba(79,142,247,.4);
+      color:var(--accent);
+    }
+    .cat-pill:active{transform:scale(.95)}
+
+    /* ── SECTION HEADER ───────────────────────────── */
+    .sh{
+      display:flex;align-items:baseline;justify-content:space-between;
+      padding:24px 22px 14px;
+    }
+    .sh h2{font-size:1.05rem;font-weight:700;letter-spacing:-.01em}
+    .sh .count{font-size:.72rem;color:var(--muted);font-weight:600}
+
+    /* ── APPS GRID ─────────────────────────────────── */
+    .app-grid{
+      padding:0 22px;
+      display:grid;
+      grid-template-columns:repeat(auto-fill,minmax(150px,1fr));
+      gap:12px;
+    }
+
+    .app{
+      position:relative;overflow:hidden;
+      min-height:170px;
+      border-radius:20px;
+      padding:14px 14px 12px;
+      background:var(--glass);
+      border:1px solid var(--border);
+      display:flex;flex-direction:column;
+      text-decoration:none;color:var(--text);
+      cursor:pointer;-webkit-tap-highlight-color:transparent;
+      backdrop-filter:blur(8px);
+      transition:transform .15s,border-color .2s,background .2s;
+    }
+    .app:active{transform:scale(.96);border-color:var(--border2)}
+    .app:hover{background:var(--glass2);border-color:var(--border2)}
+    .app.hidden{display:none}
+
+    /* sutil overlay diagonal pra dar profundidade */
+    .app::before{
+      content:'';position:absolute;inset:0;pointer-events:none;
+      background:linear-gradient(135deg,rgba(255,255,255,.03) 0%,transparent 60%);
+    }
+
+    /* barra de cor à esquerda por categoria */
+    .app::after{
+      content:'';position:absolute;left:0;top:14px;bottom:14px;
+      width:3px;border-radius:0 3px 3px 0;
+      background:var(--cat-color, var(--accent));
+      opacity:.85;
+    }
+    .app[data-cat="financas"] {--cat-color:#3b82f6}
+    .app[data-cat="viagem"]   {--cat-color:#a78bfa}
+    .app[data-cat="foto"]     {--cat-color:#14b8a6}
+    .app[data-cat="info"]     {--cat-color:#22c55e}
+    .app[data-cat="tcu"]      {--cat-color:#f59e0b}
+    .app[data-cat="prod"]     {--cat-color:#fb923c}
+    .app[data-cat="cultura"]  {--cat-color:#f5c518}
+
+    .app-top{
+      display:flex;align-items:flex-start;justify-content:space-between;
+      gap:8px;position:relative;z-index:1;
+    }
+    .app-emoji{
+      font-size:1.7rem;line-height:1;
+      filter:drop-shadow(0 2px 6px rgba(0,0,0,.3));
+    }
+    .live-dot{
+      width:6px;height:6px;border-radius:50%;
+      background:var(--green);
+      box-shadow:0 0 8px rgba(34,197,94,.6);
+      animation:livepulse 2s ease-in-out infinite;
+      margin-top:6px;
+    }
+    @keyframes livepulse{0%,100%{box-shadow:0 0 4px rgba(34,197,94,.4)}
+      50%{box-shadow:0 0 10px rgba(34,197,94,.8)}}
+
+    .app-name{
+      font-size:.92rem;font-weight:700;letter-spacing:-.01em;
+      margin-top:10px;line-height:1.2;
+      position:relative;z-index:1;
+    }
+    .app-sub{
+      font-size:.68rem;color:var(--muted);
+      margin-top:3px;line-height:1.35;
+      position:relative;z-index:1;
+      display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;
+      overflow:hidden;
+    }
+
+    .app-stat{
+      margin-top:auto;padding-top:12px;
+      position:relative;z-index:1;
+    }
+    .app-stat-num{
+      font-size:1.6rem;font-weight:800;letter-spacing:-.03em;
+      line-height:1;display:block;
+      background:linear-gradient(135deg,#f0f4ff,#cbd5e1);
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+      background-clip:text;
+    }
+    .app-stat-num.sm{font-size:1.05rem}
+    .app-stat-lbl{
+      font-size:.58rem;color:var(--muted);
+      text-transform:uppercase;letter-spacing:.06em;
+      font-weight:600;margin-top:3px;display:block;
+    }
+
+    /* ── SKELETON ──────────────────────────────────── */
+    .sk{
+      display:inline-block;height:.8em;border-radius:4px;
+      background:linear-gradient(90deg,var(--glass2) 25%,rgba(255,255,255,.06) 50%,var(--glass2) 75%);
+      background-size:200% 100%;
+      animation:shimmer 1.5s infinite;min-width:24px;
+    }
+    @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+    /* ── EMPTY ─────────────────────────────────────── */
+    .empty{
+      grid-column:1/-1;text-align:center;
+      padding:40px 20px;color:var(--muted);
+      font-size:.82rem;
+    }
+
+    /* ── BOTTOM NAV ────────────────────────────────── */
+    .bnav{
+      position:fixed;bottom:0;left:0;right:0;z-index:50;
+      padding:0 12px calc(10px + var(--safe-bot));
+    }
+    .bnav-inner{
+      background:rgba(13,17,32,.85);
+      backdrop-filter:blur(20px);
+      border:1px solid var(--border2);
+      border-radius:24px;
+      display:flex;justify-content:space-around;align-items:center;
+      padding:10px 8px;
+    }
+    .bni{
+      display:flex;flex-direction:column;align-items:center;gap:3px;
+      font-size:.6rem;font-weight:600;color:var(--muted);
+      cursor:pointer;-webkit-tap-highlight-color:transparent;
+      padding:4px 18px;border-radius:12px;
+      transition:color .2s,background .2s;
+      letter-spacing:.03em;text-transform:uppercase;
+    }
+    .bni svg{width:20px;height:20px;transition:transform .2s}
+    .bni.active{color:var(--accent)}
+    .bni.active svg{transform:scale(1.1)}
+    .bni:active{background:var(--glass2)}
+
+    /* ── PROFILE SHEET ─────────────────────────────── */
+    #sheet-bg{
+      display:none;position:fixed;inset:0;z-index:100;
+      background:rgba(0,0,0,.6);backdrop-filter:blur(6px);
+    }
+    #sheet-bg.open{display:block}
+    .sheet{
+      position:absolute;bottom:0;left:0;right:0;
+      background:var(--bg2);
+      border:1px solid var(--border);
+      border-radius:28px 28px 0 0;
+      padding:12px 24px calc(32px + var(--safe-bot));
+    }
+    .sheet-handle{
+      width:36px;height:4px;border-radius:2px;
+      background:var(--border2);margin:0 auto 20px;
+    }
+    .sheet-avatar{
+      width:72px;height:72px;border-radius:50%;
+      background:linear-gradient(135deg,#4f8ef7,#7c3aed);
+      display:flex;align-items:center;justify-content:center;
+      font-size:1.6rem;font-weight:800;color:#fff;
+      margin-bottom:14px;
+      box-shadow:0 8px 32px rgba(79,142,247,.3);
+    }
+    .sheet-name{font-size:1.2rem;font-weight:800;letter-spacing:-.02em}
+    .sheet-sub{font-size:.8rem;color:var(--muted);margin-top:3px}
+    .sheet-stats{
+      display:grid;grid-template-columns:repeat(3,1fr);
+      gap:10px;margin:20px 0;
+    }
+    .stat-box{
+      background:var(--glass2);border:1px solid var(--border);
+      border-radius:16px;padding:14px 10px;text-align:center;
+    }
+    .stat-num{font-size:1.4rem;font-weight:800;letter-spacing:-.02em}
+    .stat-lbl{font-size:.65rem;color:var(--muted);margin-top:3px;font-weight:500}
+    .sheet-info{font-size:.82rem;color:var(--muted2);line-height:2}
+    .sheet-close{
+      margin-top:20px;width:100%;
+      background:var(--glass2);border:1px solid var(--border2);
+      border-radius:14px;padding:13px;
+      color:var(--muted2);font-size:.88rem;font-weight:600;
+      cursor:pointer;transition:background .2s;
+    }
+    .sheet-close:active{background:var(--glass)}
+
+    /* ── REFRESH ───────────────────────────────────── */
+    .refresh-btn{
+      position:fixed;
+      top:calc(18px + var(--safe-top));
+      right:76px;
+      background:var(--glass2);
+      border:1px solid var(--border);
+      border-radius:99px;
+      padding:6px 13px;
+      font-size:.7rem;font-weight:600;
+      color:var(--muted2);cursor:pointer;z-index:60;
+      backdrop-filter:blur(8px);
+      -webkit-tap-highlight-color:transparent;
+      transition:color .2s;
+    }
+    .refresh-btn.spin{animation:rspin .7s linear infinite}
+    @keyframes rspin{to{transform:rotate(360deg)}}
+  </style>
+</head>
+<body>
+
+<!-- Background orbs -->
+<div class="orbs">
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+  <div class="orb orb3"></div>
+</div>
+
+<button class="refresh-btn" id="rbtn" onclick="loadData(true)">↻</button>
+
+<div id="app">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-left">
+      <div class="header-eyebrow">Olá, Rodrigo 👋</div>
+      <div class="header-title">SuperApp</div>
+      <div class="header-sub" id="header-sub">Hub pessoal · todos os apps em um lugar</div>
+    </div>
+    <div class="avatar-btn" onclick="openSheet()">RC</div>
+  </div>
+
+  <!-- SEARCH -->
+  <div class="search">
+    <svg class="search-icon" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="7.5" cy="7.5" r="5.5"/><line x1="12" y1="12" x2="16" y2="16"/>
+    </svg>
+    <input id="srch" type="search" placeholder="Buscar app, categoria…" autocomplete="off"/>
+  </div>
+
+  <!-- CATEGORIAS -->
+  <div class="cats-wrap">
+    <div class="cats">
+      <div class="cat-pill active" onclick="filter('all',this)"><span class="e">🏠</span>Todos</div>
+      <div class="cat-pill" onclick="filter('financas',this)"><span class="e">📊</span>Finanças</div>
+      <div class="cat-pill" onclick="filter('viagem',this)"><span class="e">✈️</span>Viagem</div>
+      <div class="cat-pill" onclick="filter('info',this)"><span class="e">📰</span>Notícias</div>
+      <div class="cat-pill" onclick="filter('tcu',this)"><span class="e">⚖️</span>TCU</div>
+      <div class="cat-pill" onclick="filter('prod',this)"><span class="e">✅</span>Produtividade</div>
+      <div class="cat-pill" onclick="filter('foto',this)"><span class="e">📷</span>Fotografia</div>
+      <div class="cat-pill" onclick="filter('cultura',this)"><span class="e">🚀</span>Cultura</div>
+    </div>
+  </div>
+
+  <!-- APPS -->
+  <div class="sh">
+    <h2>Apps</h2>
+    <span class="count" id="app-count"></span>
+  </div>
+
+  <div class="app-grid" id="app-grid">
+
+    <!-- ── FINANÇAS ── -->
+    <a class="app" href="https://aion-financas.vercel.app/" data-cat="financas"
+       data-tags="rc controle financeiro patrimônio fluxo investimentos aposentadoria projeção fgts funcef">
+      <div class="app-top">
+        <div class="app-emoji">📈</div>
+      </div>
+      <div class="app-name">RC</div>
+      <div class="app-sub">Controle financeiro · projeção até 2043</div>
+      <div class="app-stat">
+        <span class="app-stat-num sm">17 anos</span>
+        <span class="app-stat-lbl">horizonte · patrimônio</span>
+      </div>
+    </a>
+
+    <a class="app" href="https://casal-rc.vercel.app/" data-cat="financas"
+       data-tags="casal rc ec ec finanças patrimônio dre despesas fatura filhos escola dois">
+      <div class="app-top">
+        <div class="app-emoji">💑</div>
+      </div>
+      <div class="app-name">Casal RC</div>
+      <div class="app-sub">Finanças do casal · DRE · despesas</div>
+      <div class="app-stat">
+        <span class="app-stat-num sm">RC + EC</span>
+        <span class="app-stat-lbl">patrimônio · dre</span>
+      </div>
+    </a>
+
+    <a class="app" href="https://cfg-app.vercel.app/" data-cat="financas"
+       data-tags="cfg finanças anbima módulos questões streak relatório diagnóstico">
+      <div class="app-top">
+        <div class="app-emoji">📊</div>
+        <span class="live-dot"></span>
+      </div>
+      <div class="app-name">CFG App</div>
+      <div class="app-sub">Preparação ANBIMA · módulos</div>
+      <div class="app-stat">
+        <span class="app-stat-num" id="x-streak"><span class="sk">&nbsp;</span></span>
+        <span class="app-stat-lbl">streak · dias</span>
+      </div>
+    </a>
+
+    <a class="app" href="https://cartao-credito-blond.vercel.app/" data-cat="financas"
+       data-tags="fatura cartão xp crédito pdf finanças">
+      <div class="app-top">
+        <div class="app-emoji">💳</div>
+      </div>
+      <div class="app-name">Fatura XP</div>
+      <div class="app-sub">Análise da fatura · envie o PDF</div>
+      <div class="app-stat">
+        <span class="app-stat-num sm">PDF</span>
+        <span class="app-stat-lbl">analisar fatura</span>
+      </div>
+    </a>
+
+    <a class="app" href="https://semanada.vercel.app/" data-cat="financas"
+       data-tags="semanada mesada finanças família crianças cerbasi envelopes poupar sonho pedro felipe">
+      <div class="app-top">
+        <div class="app-emoji">💰</div>
+      </div>
+      <div class="app-name">Semanada</div>
+      <div class="app-sub">Mesada Pedro & Felipe · 3 envelopes</div>
+      <div class="app-stat">
+        <span class="app-stat-num">R$25</span>
+        <span class="app-stat-lbl">semanada base</span>
+      </div>
+    </a>
+
+    <!-- ── VIAGEM ── -->
+    <a class="app" href="https://japao-2026.vercel.app/" data-cat="viagem"
+       data-tags="japão roteiro viagem tóquio quioto osaka itinerário família">
+      <div class="app-top">
+        <div class="app-emoji">🇯🇵</div>
+        <span class="live-dot"></span>
+      </div>
+      <div class="app-name">Japão 2026</div>
+      <div class="app-sub">27 jun – 16 jul · família Coelho</div>
+      <div class="app-stat">
+        <span class="app-stat-num" id="x-dias"><span class="sk">&nbsp;</span></span>
+        <span class="app-stat-lbl">dias restantes</span>
+      </div>
+    </a>
+
+    <!-- ── INFO ── -->
+    <a class="app" href="https://news-radar-ochre.vercel.app/" data-cat="info"
+       data-tags="news notícias radar finanças fundos ia bloomberg reuters manchetes">
+      <div class="app-top">
+        <div class="app-emoji">📰</div>
+      </div>
+      <div class="app-name">News Radar</div>
+      <div class="app-sub">Manchetes · finanças, fundos, IA</div>
+      <div class="app-stat">
+        <span class="app-stat-num sm">Ao vivo</span>
+        <span class="app-stat-lbl">manchetes do dia</span>
+      </div>
+    </a>
+
+    <!-- ── TCU ── -->
+    <a class="app" href="https://tcu-fgts.vercel.app/" data-cat="tcu"
+       data-tags="tcu fgts fi-fgts acervo decisões acórdãos fundos investimento">
+      <div class="app-top">
+        <div class="app-emoji">⚖️</div>
+        <span class="live-dot"></span>
+      </div>
+      <div class="app-name">TCU FI-FGTS</div>
+      <div class="app-sub">Acervo de decisões</div>
+      <div class="app-stat">
+        <span class="app-stat-num" id="x-fgts"><span class="sk">&nbsp;</span></span>
+        <span class="app-stat-lbl">acórdãos</span>
+      </div>
+    </a>
+
+    <a class="app" href="https://tcu-mcmv-fgts.vercel.app/" data-cat="tcu"
+       data-tags="tcu mcmv fgts minha casa minha vida acervo decisões acórdãos">
+      <div class="app-top">
+        <div class="app-emoji">🏘️</div>
+        <span class="live-dot"></span>
+      </div>
+      <div class="app-name">TCU MCMV</div>
+      <div class="app-sub">Decisões MCMV × FGTS</div>
+      <div class="app-stat">
+        <span class="app-stat-num" id="x-mcmv"><span class="sk">&nbsp;</span></span>
+        <span class="app-stat-lbl">acórdãos</span>
+      </div>
+    </a>
+
+    <!-- ── PRODUTIVIDADE ── -->
+    <a class="app" href="https://cockpit-rc.vercel.app/" data-cat="prod"
+       data-tags="rc news jornal financas tech ia fundos bancario politica curadoria gemini reuters">
+      <div class="app-top">
+        <div class="app-emoji">🗞️</div>
+      </div>
+      <div class="app-name">RC News</div>
+      <div class="app-sub">Portal pessoal · 6 editorias · 35+ fontes</div>
+      <div class="app-stat">
+        <span class="app-stat-num sm">4h</span>
+        <span class="app-stat-lbl">refresh · curadoria</span>
+      </div>
+    </a>
+
+    <a class="app" href="https://gtd-app-liart.vercel.app/inbox" data-cat="prod"
+       data-tags="gtd tarefas produtividade inbox projetos próximas ações gestão">
+      <div class="app-top">
+        <div class="app-emoji">✅</div>
+      </div>
+      <div class="app-name">GTD</div>
+      <div class="app-sub">Inbox · projetos · próximas ações</div>
+      <div class="app-stat">
+        <span class="app-stat-num sm">Inbox</span>
+        <span class="app-stat-lbl">getting things done</span>
+      </div>
+    </a>
+
+    <!-- ── FOTO ── -->
+    <a class="app" href="https://instantes-rc.netlify.app/" data-cat="foto"
+       data-tags="instantes fotos portfólio pwa fotografia netlify álbuns">
+      <div class="app-top">
+        <div class="app-emoji">📷</div>
+      </div>
+      <div class="app-name">Instantes</div>
+      <div class="app-sub">Portfólio · 44 álbuns</div>
+      <div class="app-stat">
+        <span class="app-stat-num">3.485</span>
+        <span class="app-stat-lbl">fotos publicadas</span>
+      </div>
+    </a>
+
+    <!-- ── CULTURA ── -->
+    <a class="app" href="https://starwars-encyclopedia-nine.vercel.app/" data-cat="cultura"
+       data-tags="star wars enciclopédia jedi sith personagens planetas galáxia force">
+      <div class="app-top">
+        <div class="app-emoji">⚔️</div>
+      </div>
+      <div class="app-name">Star Wars</div>
+      <div class="app-sub">Enciclopédia galáctica</div>
+      <div class="app-stat">
+        <span class="app-stat-num" style="color:#f5c518;-webkit-text-fill-color:#f5c518">∞</span>
+        <span class="app-stat-lbl">may the force…</span>
+      </div>
+    </a>
+
+    <div class="empty" id="empty" style="display:none">Nenhum app encontrado.</div>
+
+  </div>
+</div>
+
+<!-- BOTTOM NAV -->
+<nav class="bnav">
+  <div class="bnav-inner">
+    <div class="bni active" id="n-hub" onclick="goHub()">
+      <svg fill="currentColor" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+      Home
+    </div>
+    <div class="bni" id="n-search" onclick="goSearch()">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/>
+      </svg>
+      Busca
+    </div>
+    <div class="bni" id="n-apps" onclick="goApps()">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <rect x="3" y="3" width="7" height="7" rx="1.5"/>
+        <rect x="14" y="3" width="7" height="7" rx="1.5"/>
+        <rect x="3" y="14" width="7" height="7" rx="1.5"/>
+        <rect x="14" y="14" width="7" height="7" rx="1.5"/>
+      </svg>
+      Apps
+    </div>
+    <div class="bni" id="n-me" onclick="openSheet()">
+      <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/>
+        <circle cx="12" cy="7" r="4"/>
+      </svg>
+      Perfil
+    </div>
+  </div>
+</nav>
+
+<!-- PROFILE SHEET -->
+<div id="sheet-bg" onclick="closeSheet()">
+  <div class="sheet" onclick="event.stopPropagation()">
+    <div class="sheet-handle"></div>
+    <div class="sheet-avatar">RC</div>
+    <div class="sheet-name">Rodrigo Coelho</div>
+    <div class="sheet-sub">rodrigocoelho1 · Vercel &amp; Netlify</div>
+    <div class="sheet-stats">
+      <div class="stat-box">
+        <div class="stat-num" id="s-apps">—</div>
+        <div class="stat-lbl">Apps ativos</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">3</div>
+        <div class="stat-lbl">Plataformas</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num" id="s-dias">—</div>
+        <div class="stat-lbl">Dias p/ Japão</div>
+      </div>
+    </div>
+    <div class="sheet-info">
+      🏢 CAIXA · Brasília<br>
+      📷 Fotógrafo amador<br>
+      ✈️ Japão em Jun 2026<br>
+      📚 Preparação CFG ANBIMA
+    </div>
+    <button class="sheet-close" onclick="closeSheet()">Fechar</button>
+  </div>
+</div>
+
+<script>
+if ('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js')
+
+// ── Visible app counter helper ────────────────────
+function updateCount() {
+  const visible = document.querySelectorAll('.app:not(.hidden)').length
+  const total = document.querySelectorAll('.app').length
+  const el = document.getElementById('app-count')
+  if (el) el.textContent = visible === total ? `${total} apps` : `${visible} de ${total}`
+  document.getElementById('empty').style.display = visible === 0 ? 'block' : 'none'
+  document.getElementById('s-apps').textContent = total
+}
+
+// ── Search ────────────────────────────────────────
+document.getElementById('srch').addEventListener('input', function() {
+  const q = this.value.toLowerCase().trim()
+  document.querySelectorAll('.app').forEach(c => {
+    const txt = ((c.dataset.tags||'') + ' ' + (c.querySelector('.app-name')?.textContent||'')).toLowerCase()
+    c.classList.toggle('hidden', q !== '' && !txt.includes(q))
+  })
+  // also drop active filter when searching
+  if (q !== '') {
+    document.querySelectorAll('.cat-pill').forEach(p => p.classList.remove('active'))
+  } else if (!document.querySelector('.cat-pill.active')) {
+    document.querySelector('.cat-pill').classList.add('active')
+  }
+  updateCount()
+})
+
+// ── Filter ────────────────────────────────────────
+function filter(cat, el) {
+  document.querySelectorAll('.cat-pill').forEach(p => p.classList.remove('active'))
+  el.classList.add('active')
+  // clear search box too
+  document.getElementById('srch').value = ''
+  document.querySelectorAll('.app').forEach(c => {
+    c.classList.toggle('hidden', cat !== 'all' && c.dataset.cat !== cat)
+  })
+  updateCount()
+}
+
+// ── Nav ───────────────────────────────────────────
+function setNav(id) {
+  document.querySelectorAll('.bni').forEach(n => n.classList.remove('active'))
+  document.getElementById(id).classList.add('active')
+}
+function goHub() {
+  setNav('n-hub')
+  document.querySelectorAll('.cat-pill').forEach(p => p.classList.remove('active'))
+  document.querySelector('.cat-pill').classList.add('active')
+  document.getElementById('srch').value = ''
+  document.querySelectorAll('.app').forEach(c => c.classList.remove('hidden'))
+  updateCount()
+  window.scrollTo({top:0,behavior:'smooth'})
+}
+function goSearch() {
+  setNav('n-search')
+  window.scrollTo({top:0,behavior:'smooth'})
+  setTimeout(()=>document.getElementById('srch').focus(),300)
+}
+function goApps() {
+  setNav('n-apps')
+  document.querySelector('.app-grid').scrollIntoView({behavior:'smooth',block:'start'})
+}
+
+// ── Profile sheet ─────────────────────────────────
+function openSheet() {
+  document.getElementById('sheet-bg').classList.add('open')
+  setNav('n-me')
+}
+function closeSheet() {
+  document.getElementById('sheet-bg').classList.remove('open')
+  setNav('n-hub')
+}
+
+// ── Live data ─────────────────────────────────────
+function set(id, html) { const el=document.getElementById(id); if(el) el.innerHTML=html }
+
+async function loadData(force=false) {
+  const btn = document.getElementById('rbtn')
+  btn.classList.add('spin')
+  try {
+    const r = await fetch(force ? `/api/hub-data?t=${Date.now()}` : '/api/hub-data')
+    const d = await r.json()
+
+    // Japão
+    if (d.japao) {
+      const dias = d.japao.diasRestantes
+      set('x-dias', dias)
+      set('s-dias', dias)
+    }
+
+    // TCU
+    set('x-fgts', d.tcuFgts?.total != null ? d.tcuFgts.total : '—')
+    set('x-mcmv', d.tcuMcmv?.total != null ? d.tcuMcmv.total : '—')
+
+    // CFG
+    if (d.cfg) {
+      set('x-streak', d.cfg.streakDias)
+    } else {
+      set('x-streak', '—')
+    }
+
+  } catch(e) {
+    console.warn(e)
+    set('x-streak','—'); set('x-dias','—'); set('x-fgts','—'); set('x-mcmv','—')
+  } finally {
+    btn.classList.remove('spin')
+  }
+}
+
+// initial paint
+updateCount()
+loadData()
+setInterval(loadData, 5*60*1000)
+</script>
+</body>
+</html>

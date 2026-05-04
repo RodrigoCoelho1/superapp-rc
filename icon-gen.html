@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"/><style>
+  body{margin:0;background:#1a1a2e;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;gap:24px;font-family:system-ui}
+  canvas{border-radius:22%;box-shadow:0 0 60px rgba(79,142,247,.5)}
+  .btns{display:flex;gap:12px}
+  button{background:#4f8ef7;color:#fff;border:none;padding:10px 20px;border-radius:8px;cursor:pointer;font-size:.9rem}
+</style></head>
+<body>
+<canvas id="c512" width="512" height="512"></canvas>
+<div class="btns">
+  <button onclick="dl(512)">Download 512×512</button>
+  <button onclick="dl(192)">Download 192×192</button>
+</div>
+
+<script>
+function drawIcon(size) {
+  const cv = document.createElement('canvas')
+  cv.width = cv.height = size
+  const ctx = cv.getContext('2d')
+  const s = size / 512  // scale factor
+
+  // ── Background
+  const bg = ctx.createRadialGradient(size*.5,size*.35,0, size*.5,size*.5, size*.65)
+  bg.addColorStop(0, '#1a2744')
+  bg.addColorStop(.6, '#0d1120')
+  bg.addColorStop(1, '#080b14')
+  ctx.fillStyle = bg
+  roundRect(ctx, 0, 0, size, size, size*.22)
+  ctx.fill()
+
+  // ── Orb glow top-right
+  const orb1 = ctx.createRadialGradient(size*.78,size*.18,0, size*.78,size*.18, size*.38)
+  orb1.addColorStop(0, 'rgba(79,142,247,.22)')
+  orb1.addColorStop(1, 'rgba(79,142,247,0)')
+  ctx.fillStyle = orb1
+  ctx.fillRect(0,0,size,size)
+
+  // ── Orb glow bottom-left
+  const orb2 = ctx.createRadialGradient(size*.22,size*.82,0, size*.22,size*.82, size*.32)
+  orb2.addColorStop(0, 'rgba(124,58,237,.2)')
+  orb2.addColorStop(1, 'rgba(124,58,237,0)')
+  ctx.fillStyle = orb2
+  ctx.fillRect(0,0,size,size)
+
+  // ── 3×3 dot grid (apps)
+  const dotR = 28*s
+  const gap  = 92*s
+  const startX = size/2 - gap
+  const startY = size/2 - gap
+
+  const colors = [
+    ['#4f8ef7','#7c3aed'],  // blue-violet
+    ['#06b6d4','#4f8ef7'],  // cyan-blue
+    ['#7c3aed','#ec4899'],  // violet-pink
+    ['#3b82f6','#06b6d4'],  // blue-cyan
+    ['#f0f4ff','#a5b4fc'],  // white (center)
+    ['#14b8a6','#3b82f6'],  // teal-blue
+    ['#f59e0b','#ef4444'],  // amber-red
+    ['#4f8ef7','#14b8a6'],  // blue-teal
+    ['#a78bfa','#7c3aed'],  // light-violet
+  ]
+
+  let i = 0
+  for (let row = 0; row < 3; row++) {
+    for (let col = 0; col < 3; col++) {
+      const x = startX + col * gap
+      const y = startY + row * gap
+      const [c1, c2] = colors[i++]
+
+      // glow
+      const glow = ctx.createRadialGradient(x,y,0, x,y, dotR*2.2)
+      glow.addColorStop(0, c1.replace('#','rgba(').replace(/(..)(..)(..)/, (_,r,g,b)=>`${parseInt(r,16)},${parseInt(g,16)},${parseInt(b,16)}`)+',0.25)')
+      // simpler glow
+      ctx.save()
+      ctx.globalAlpha = 0.3
+      ctx.fillStyle = c1
+      ctx.beginPath()
+      ctx.arc(x, y, dotR*1.9, 0, Math.PI*2)
+      ctx.fill()
+      ctx.restore()
+
+      // dot
+      const g = ctx.createLinearGradient(x-dotR,y-dotR, x+dotR,y+dotR)
+      g.addColorStop(0, c1)
+      g.addColorStop(1, c2)
+      ctx.fillStyle = g
+      ctx.beginPath()
+      ctx.arc(x, y, dotR, 0, Math.PI*2)
+      ctx.fill()
+
+      // shine
+      ctx.save()
+      ctx.globalAlpha = 0.35
+      ctx.fillStyle = '#ffffff'
+      ctx.beginPath()
+      ctx.arc(x - dotR*.28, y - dotR*.28, dotR*.45, 0, Math.PI*2)
+      ctx.fill()
+      ctx.restore()
+    }
+  }
+
+  // ── Subtle border
+  ctx.save()
+  ctx.globalAlpha = 0.15
+  ctx.strokeStyle = '#a5b4fc'
+  ctx.lineWidth = 1.5*s
+  roundRect(ctx, 1*s, 1*s, size-2*s, size-2*s, size*.22-.5*s)
+  ctx.stroke()
+  ctx.restore()
+
+  return cv
+}
+
+function roundRect(ctx, x, y, w, h, r) {
+  ctx.beginPath()
+  ctx.moveTo(x+r, y)
+  ctx.lineTo(x+w-r, y)
+  ctx.quadraticCurveTo(x+w, y, x+w, y+r)
+  ctx.lineTo(x+w, y+h-r)
+  ctx.quadraticCurveTo(x+w, y+h, x+w-r, y+h)
+  ctx.lineTo(x+r, y+h)
+  ctx.quadraticCurveTo(x, y+h, x, y+h-r)
+  ctx.lineTo(x, y+r)
+  ctx.quadraticCurveTo(x, y, x+r, y)
+  ctx.closePath()
+}
+
+// render preview
+const preview = drawIcon(512)
+const main = document.getElementById('c512')
+main.getContext('2d').drawImage(preview, 0, 0)
+
+function dl(size) {
+  const cv = drawIcon(size)
+  const a = document.createElement('a')
+  a.download = `icon-${size}.png`
+  a.href = cv.toDataURL('image/png')
+  a.click()
+}
+
+// expose base64 for script extraction
+window.getIconB64 = (size) => drawIcon(size).toDataURL('image/png').split(',')[1]
+</script>
+</body>
+</html>
