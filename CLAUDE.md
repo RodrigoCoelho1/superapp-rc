@@ -30,6 +30,7 @@ Acessível no browser e no celular (instalável como app).
 | Acervo TCU — FI-FGTS | https://rc-tcu.vercel.app/ | Python FastAPI / Vercel |
 | Acervo TCU — MCMV×FGTS | https://tcu-mcmv-fgts.vercel.app/ | Python FastAPI / Vercel |
 | Star Wars | https://rc-starwars.vercel.app/ | Next.js / Vercel |
+| Claude (antes: Mastery Hub) | https://rc-mastery-claude.vercel.app/ | HTML estático / Vercel |
 
 **RC** consome dados do **Fatura XP** via `data/cartao.json` (atualizado pelo script `scripts/sync-cartao.mjs` no projeto RC).
 
