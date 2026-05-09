@@ -24,7 +24,6 @@ Acessível no browser e no celular (instalável como app).
 | Semanada | https://rc-semanada.vercel.app/ | Vite / Vercel |
 | Japão 2026 | https://rc-japao.vercel.app/ | Vite / Vercel |
 | News Radar | https://rc-news-app.vercel.app/ | Next.js / Vercel |
-| RC News | https://rc-cockpit-app.vercel.app/ | Next.js / Vercel |
 | GTD | https://gtd-app-liart.vercel.app/inbox | Next.js / Vercel |
 | Instantes | https://instantes-rc.netlify.app/ | PWA / Netlify |
 | Acervo TCU — FI-FGTS | https://rc-tcu.vercel.app/ | Python FastAPI / Vercel |
