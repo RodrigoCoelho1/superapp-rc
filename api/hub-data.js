@@ -4,10 +4,9 @@ module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*')
   res.setHeader('Cache-Control', 's-maxage=60, stale-while-revalidate=120')
 
-  const [cfg, tcuFgts, tcuMcmv] = await Promise.allSettled([
+  const [cfg, tcuFgts] = await Promise.allSettled([
     fetchCfg(),
     fetchTcuCount('https://rc-tcu.vercel.app/'),
-    fetchTcuCount('https://tcu-mcmv-fgts.vercel.app/'),
   ])
 
   const tripDate = new Date('2026-06-27')
@@ -17,7 +16,6 @@ module.exports = async function handler(req, res) {
     geradoEm:  new Date().toISOString(),
     cfg:       cfg.status     === 'fulfilled' ? cfg.value     : null,
     tcuFgts:   tcuFgts.status === 'fulfilled' ? tcuFgts.value : null,
-    tcuMcmv:   tcuMcmv.status === 'fulfilled' ? tcuMcmv.value : null,
     japao:     { diasRestantes: diasParaJapao, dataPartida: '27/06/2026' },
     instantes: { totalFotos: 3485, albuns: 44 },
   })

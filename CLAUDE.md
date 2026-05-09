@@ -18,18 +18,17 @@ Acessível no browser e no celular (instalável como app).
 | App | URL | Stack |
 |-----|-----|-------|
 | RC | https://rc-financas.vercel.app/ | HTML estático + PWA / Vercel |
-| Casal RC | https://casal-rc.vercel.app/ | HTML estático + PWA / Vercel |
+| Casal RC | https://rc-casal.vercel.app/ | HTML estático + PWA / Vercel |
 | CFG App | https://rc-cfg.vercel.app/ | Next.js / Vercel |
 | Fatura XP | https://rc-cartao.vercel.app/ | Next.js / Vercel |
 | Semanada | https://rc-semanada.vercel.app/ | Vite / Vercel |
 | Japão 2026 | https://rc-japao.vercel.app/ | Vite / Vercel |
-| News Radar | https://rc-news-app.vercel.app/ | Next.js / Vercel |
-| GTD | https://gtd-app-liart.vercel.app/inbox | Next.js / Vercel |
+| News Radar | https://rc-noticias.vercel.app/ | Next.js / Vercel |
 | Instantes | https://instantes-rc.netlify.app/ | PWA / Netlify |
 | Acervo TCU — FI-FGTS | https://rc-tcu.vercel.app/ | Python FastAPI / Vercel |
-| Acervo TCU — MCMV×FGTS | https://tcu-mcmv-fgts.vercel.app/ | Python FastAPI / Vercel |
 | Star Wars | https://rc-starwars.vercel.app/ | Next.js / Vercel |
 | Claude (antes: Mastery Hub) | https://rc-mastery-claude.vercel.app/ | HTML estático / Vercel |
+| SaxPath | https://rc-saxofone.vercel.app/ | HTML estático / Vercel |
 
 **RC** consome dados do **Fatura XP** via `data/cartao.json` (atualizado pelo script `scripts/sync-cartao.mjs` no projeto RC).
 

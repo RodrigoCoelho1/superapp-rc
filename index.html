@@ -413,7 +413,7 @@
       </div>
     </a>
 
-    <a class="app" href="https://casal-rc.vercel.app/" data-cat="financas"
+    <a class="app" href="https://rc-casal.vercel.app/" data-cat="financas"
        data-tags="casal rc ec ec finanças patrimônio dre despesas fatura filhos escola dois">
       <div class="app-top">
         <div class="app-emoji">💑</div>
@@ -482,7 +482,7 @@
     </a>
 
     <!-- ── INFO ── -->
-    <a class="app" href="https://rc-news-app.vercel.app/" data-cat="info"
+    <a class="app" href="https://rc-noticias.vercel.app/" data-cat="info"
        data-tags="news notícias radar finanças fundos ia bloomberg reuters manchetes">
       <div class="app-top">
         <div class="app-emoji">📰</div>
@@ -510,34 +510,7 @@
       </div>
     </a>
 
-    <a class="app" href="https://tcu-mcmv-fgts.vercel.app/" data-cat="tcu"
-       data-tags="tcu mcmv fgts minha casa minha vida acervo decisões acórdãos">
-      <div class="app-top">
-        <div class="app-emoji">🏘️</div>
-        <span class="live-dot"></span>
-      </div>
-      <div class="app-name">TCU MCMV</div>
-      <div class="app-sub">Decisões MCMV × FGTS</div>
-      <div class="app-stat">
-        <span class="app-stat-num" id="x-mcmv"><span class="sk">&nbsp;</span></span>
-        <span class="app-stat-lbl">acórdãos</span>
-      </div>
-    </a>
-
     <!-- ── PRODUTIVIDADE ── -->
-    <a class="app" href="https://gtd-app-liart.vercel.app/inbox" data-cat="prod"
-       data-tags="gtd tarefas produtividade inbox projetos próximas ações gestão">
-      <div class="app-top">
-        <div class="app-emoji">✅</div>
-      </div>
-      <div class="app-name">GTD</div>
-      <div class="app-sub">Inbox · projetos · próximas ações</div>
-      <div class="app-stat">
-        <span class="app-stat-num sm">Inbox</span>
-        <span class="app-stat-lbl">getting things done</span>
-      </div>
-    </a>
-
     <a class="app" href="https://rc-mastery-claude.vercel.app/" data-cat="prod"
        data-tags="claude mastery hub chat cowork code prompts quiz xp roadmap aprendizado prática ia">
       <div class="app-top">
@@ -754,7 +727,6 @@ async function loadData(force=false) {
 
     // TCU
     set('x-fgts', d.tcuFgts?.total != null ? d.tcuFgts.total : '—')
-    set('x-mcmv', d.tcuMcmv?.total != null ? d.tcuMcmv.total : '—')
 
     // CFG
     if (d.cfg) {
@@ -765,7 +737,7 @@ async function loadData(force=false) {
 
   } catch(e) {
     console.warn(e)
-    set('x-streak','—'); set('x-dias','—'); set('x-fgts','—'); set('x-mcmv','—')
+    set('x-streak','—'); set('x-dias','—'); set('x-fgts','—')
   } finally {
     btn.classList.remove('spin')
   }
