@@ -32,6 +32,7 @@
       --accent2:  #7c3aed;
       --green:    #22c55e;
       --amber:    #f59e0b;
+      --red:      #f43f5e;
       --safe-top: env(safe-area-inset-top,0px);
       --safe-bot: env(safe-area-inset-bottom,0px);
     }
@@ -238,6 +239,67 @@
       font-weight:600;margin-top:3px;display:block;
     }
 
+    /* ── HERO CONTEXTUAL ──────────────────────────── */
+    .hero-context{
+      margin:8px 22px 16px;padding:14px 16px;
+      background:linear-gradient(135deg,rgba(79,142,247,.12),rgba(124,58,237,.12));
+      border:1px solid rgba(79,142,247,.2);border-radius:18px;
+      display:flex;flex-direction:column;gap:8px;
+    }
+    .hctx-row{display:flex;align-items:center;gap:10px;font-size:.82rem;font-weight:500;color:#cbd5e1}
+    .hctx-row .ico{font-size:1.05rem;flex-shrink:0;width:22px;text-align:center}
+    .hctx-row .txt{flex:1;min-width:0}
+    .hctx-row b{color:#fff;font-weight:700}
+    .hctx-row .pill{font-size:.62rem;background:rgba(244,63,94,.2);color:#fda4af;padding:2px 8px;border-radius:99px;font-weight:600;margin-left:auto;text-transform:uppercase;letter-spacing:.04em;flex-shrink:0}
+    .hctx-row .pill.amber{background:rgba(245,158,11,.18);color:#fcd34d}
+    .hctx-row .pill.green{background:rgba(34,197,94,.18);color:#86efac}
+    .hctx-row .pill.red{background:rgba(244,63,94,.22);color:#fda4af}
+
+    /* ── FAVORITOS ────────────────────────────────── */
+    .fav-grid{padding:0 22px;display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:4px}
+    .fav{
+      position:relative;overflow:hidden;
+      min-height:135px;border-radius:22px;padding:16px;
+      display:flex;flex-direction:column;
+      text-decoration:none;color:#fff;
+      border:1px solid rgba(255,255,255,.18);
+      cursor:pointer;-webkit-tap-highlight-color:transparent;
+      transition:transform .15s;
+    }
+    .fav:active{transform:scale(.96)}
+    .fav.f1{background:linear-gradient(135deg,#4f46e5,#7c3aed)}
+    .fav.f2{background:linear-gradient(135deg,#0ea5e9,#06b6d4)}
+    .fav-emoji{font-size:1.9rem;line-height:1;filter:drop-shadow(0 2px 6px rgba(0,0,0,.3))}
+    .fav-name{font-size:1.02rem;font-weight:800;margin-top:8px;letter-spacing:-.02em}
+    .fav-stat{margin-top:auto;font-size:.72rem;opacity:.9;font-weight:500;padding-top:8px}
+    .fav-badge{
+      position:absolute;top:14px;right:14px;
+      background:rgba(255,255,255,.18);backdrop-filter:blur(8px);
+      border-radius:99px;padding:4px 10px;
+      font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;
+    }
+
+    /* ── BADGE DE ATIVIDADE ───────────────────────── */
+    .app-badge{
+      width:9px;height:9px;border-radius:50%;
+      margin-top:6px;flex-shrink:0;
+    }
+    .app-badge.dot-green{background:var(--green);box-shadow:0 0 8px rgba(34,197,94,.6);animation:badgepulse 2s infinite}
+    .app-badge.dot-amber{background:var(--amber);box-shadow:0 0 8px rgba(245,158,11,.6)}
+    .app-badge.dot-red{background:var(--red);box-shadow:0 0 8px rgba(244,63,94,.6)}
+    @keyframes badgepulse{0%,100%{box-shadow:0 0 4px rgba(34,197,94,.4)}50%{box-shadow:0 0 12px rgba(34,197,94,.85)}}
+
+    /* ── QUICK ACTION ─────────────────────────────── */
+    .app-quick{
+      margin-top:8px;padding:6px 10px;
+      background:rgba(79,142,247,.12);border:1px solid rgba(79,142,247,.25);
+      border-radius:10px;font-size:.66rem;font-weight:700;color:#a5b4fc;
+      text-align:center;letter-spacing:.02em;
+      position:relative;z-index:2;
+      transition:background .2s;
+    }
+    .app-quick:hover{background:rgba(79,142,247,.22)}
+
     /* ── SKELETON ──────────────────────────────────── */
     .sk{
       display:inline-block;height:.8em;border-radius:4px;
@@ -369,12 +431,48 @@
     <div class="avatar-btn" onclick="openSheet()">RC</div>
   </div>
 
+  <!-- HERO CONTEXTUAL -->
+  <div class="hero-context" id="hero-context">
+    <div class="hctx-row">
+      <span class="ico">🇯🇵</span>
+      <span class="txt"><b id="hctx-japao-d">—</b> pro Japão · embarque 27/jun (QR780)</span>
+      <span class="pill green" id="hctx-japao-pill">no prazo</span>
+    </div>
+    <div class="hctx-row">
+      <span class="ico">⚖️</span>
+      <span class="txt">Anteprojeto FII PU — devolver pra Thais até <b>segunda</b></span>
+      <span class="pill amber">2 dias</span>
+    </div>
+    <div class="hctx-row">
+      <span class="ico">💳</span>
+      <span class="txt">Fatura XP fecha em <b id="hctx-fatura-d">—</b> · 3 gastos não categorizados</span>
+      <span class="pill">ação</span>
+    </div>
+  </div>
+
   <!-- SEARCH -->
   <div class="search">
     <svg class="search-icon" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2">
       <circle cx="7.5" cy="7.5" r="5.5"/><line x1="12" y1="12" x2="16" y2="16"/>
     </svg>
     <input id="srch" type="search" placeholder="Buscar app, categoria…" autocomplete="off"/>
+  </div>
+
+  <!-- FAVORITOS -->
+  <div class="sh" style="padding:4px 22px 12px"><h2>⭐ Favoritos</h2><span class="count">2 fixados</span></div>
+  <div class="fav-grid">
+    <a class="fav f1" href="https://rc-japao.vercel.app/">
+      <span class="fav-emoji">🇯🇵</span>
+      <div class="fav-name">Japão 2026</div>
+      <div class="fav-stat" id="fav-japao-stat">— · família Coelho</div>
+      <span class="fav-badge">🔥 hot</span>
+    </a>
+    <a class="fav f2" href="https://rc-cartao.vercel.app/">
+      <span class="fav-emoji">💳</span>
+      <div class="fav-name">Cartão XP</div>
+      <div class="fav-stat" id="fav-cartao-stat">fecha em —</div>
+      <span class="fav-badge">3 novos</span>
+    </a>
   </div>
 
   <!-- CATEGORIAS -->
@@ -404,6 +502,7 @@
        data-tags="rc controle financeiro patrimônio fluxo investimentos aposentadoria projeção fgts funcef">
       <div class="app-top">
         <div class="app-emoji">📈</div>
+        <span class="app-badge dot-amber" title="ação leve pendente"></span>
       </div>
       <div class="app-name">RC</div>
       <div class="app-sub">Controle financeiro · projeção até 2043</div>
@@ -411,12 +510,14 @@
         <span class="app-stat-num sm">17 anos</span>
         <span class="app-stat-lbl">horizonte · patrimônio</span>
       </div>
+      <div class="app-quick">+ lançar gasto</div>
     </a>
 
     <a class="app" href="https://rc-casal.vercel.app/" data-cat="financas"
        data-tags="casal rc ec ec finanças patrimônio dre despesas fatura filhos escola dois">
       <div class="app-top">
         <div class="app-emoji">💑</div>
+        <span class="app-badge dot-green" title="ativo"></span>
       </div>
       <div class="app-name">Casal RC</div>
       <div class="app-sub">Finanças do casal · DRE · despesas</div>
@@ -430,7 +531,7 @@
        data-tags="cfg finanças anbima módulos questões streak relatório diagnóstico">
       <div class="app-top">
         <div class="app-emoji">📊</div>
-        <span class="live-dot"></span>
+        <span class="app-badge dot-red" title="atenção · 10 dias sem estudar"></span>
       </div>
       <div class="app-name">CFG App</div>
       <div class="app-sub">Preparação ANBIMA · módulos</div>
@@ -438,12 +539,14 @@
         <span class="app-stat-num" id="x-streak"><span class="sk">&nbsp;</span></span>
         <span class="app-stat-lbl">streak · dias</span>
       </div>
+      <div class="app-quick">▶ quiz rápido</div>
     </a>
 
     <a class="app" href="https://rc-cartao.vercel.app/" data-cat="financas"
        data-tags="fatura cartão xp crédito pdf finanças">
       <div class="app-top">
         <div class="app-emoji">💳</div>
+        <span class="app-badge dot-green" title="ativo"></span>
       </div>
       <div class="app-name">Fatura XP</div>
       <div class="app-sub">Análise da fatura · envie o PDF</div>
@@ -457,6 +560,7 @@
        data-tags="semanada mesada finanças família crianças cerbasi envelopes poupar sonho pedro felipe">
       <div class="app-top">
         <div class="app-emoji">💰</div>
+        <span class="app-badge dot-green" title="ativo"></span>
       </div>
       <div class="app-name">Semanada</div>
       <div class="app-sub">Mesada Pedro & Felipe · 3 envelopes</div>
@@ -471,7 +575,7 @@
        data-tags="japão roteiro viagem tóquio quioto osaka itinerário família">
       <div class="app-top">
         <div class="app-emoji">🇯🇵</div>
-        <span class="live-dot"></span>
+        <span class="app-badge dot-green" title="ativo"></span>
       </div>
       <div class="app-name">Japão 2026</div>
       <div class="app-sub">27 jun – 16 jul · família Coelho</div>
@@ -479,6 +583,7 @@
         <span class="app-stat-num" id="x-dias"><span class="sk">&nbsp;</span></span>
         <span class="app-stat-lbl">dias restantes</span>
       </div>
+      <div class="app-quick">🔊 frases JP</div>
     </a>
 
     <!-- ── INFO ── -->
@@ -486,6 +591,7 @@
        data-tags="news notícias radar finanças fundos ia bloomberg reuters manchetes">
       <div class="app-top">
         <div class="app-emoji">📰</div>
+        <span class="app-badge dot-green" title="ativo"></span>
       </div>
       <div class="app-name">News Radar</div>
       <div class="app-sub">Manchetes · finanças, fundos, IA</div>
@@ -500,7 +606,7 @@
        data-tags="tcu fgts fi-fgts acervo decisões acórdãos fundos investimento">
       <div class="app-top">
         <div class="app-emoji">⚖️</div>
-        <span class="live-dot"></span>
+        <span class="app-badge dot-green" title="ativo"></span>
       </div>
       <div class="app-name">TCU FI-FGTS</div>
       <div class="app-sub">Acervo de decisões</div>
@@ -515,6 +621,7 @@
        data-tags="claude mastery hub chat cowork code prompts quiz xp roadmap aprendizado prática ia">
       <div class="app-top">
         <div class="app-emoji">🏆</div>
+        <span class="app-badge dot-green" title="ativo"></span>
       </div>
       <div class="app-name">Claude</div>
       <div class="app-sub">Claude Desktop em 30 dias · Quiz · XP</div>
@@ -529,6 +636,7 @@
        data-tags="instantes fotos portfólio pwa fotografia netlify álbuns">
       <div class="app-top">
         <div class="app-emoji">📷</div>
+        <span class="app-badge dot-green" title="ativo"></span>
       </div>
       <div class="app-name">Instantes</div>
       <div class="app-sub">Portfólio · 44 álbuns</div>
@@ -543,6 +651,7 @@
        data-tags="star wars enciclopédia jedi sith personagens planetas galáxia force">
       <div class="app-top">
         <div class="app-emoji">⚔️</div>
+        <span class="app-badge dot-green" title="ativo"></span>
       </div>
       <div class="app-name">Star Wars</div>
       <div class="app-sub">Enciclopédia galáctica</div>
@@ -556,6 +665,7 @@
        data-tags="saxofone sax yamaha yds-150 partituras solfejo aprendizado música mpb jazz bossanova">
       <div class="app-top">
         <div class="app-emoji">🎷</div>
+        <span class="app-badge dot-green" title="ativo"></span>
       </div>
       <div class="app-name">SaxPath</div>
       <div class="app-sub">Aprendizado de saxofone</div>
@@ -743,10 +853,55 @@ async function loadData(force=false) {
   }
 }
 
+// ── Hero contextual (hardcoded V1) ────────────────
+function daysBetween(a, b) {
+  const ms = b.getTime() - a.getTime()
+  return Math.ceil(ms / 86400000)
+}
+function renderHero() {
+  const today = new Date(); today.setHours(0,0,0,0)
+
+  // 1. Japão — embarque 27/jun/2026 (QR780)
+  const japao = new Date(2026, 5, 27)
+  const dJapao = daysBetween(today, japao)
+  const elJ = document.getElementById('hctx-japao-d')
+  if (elJ) elJ.textContent = dJapao > 0 ? `${dJapao} dias` : (dJapao === 0 ? 'hoje' : 'embarcou')
+  const pillJ = document.getElementById('hctx-japao-pill')
+  if (pillJ) {
+    pillJ.classList.remove('green','amber','red')
+    if (dJapao > 30) { pillJ.classList.add('green'); pillJ.textContent = 'no prazo' }
+    else if (dJapao >= 7) { pillJ.classList.add('amber'); pillJ.textContent = 'atenção' }
+    else { pillJ.classList.add('red'); pillJ.textContent = 'urgente' }
+  }
+
+  // 3. Fatura XP fecha dia 13 do mês (próximo 13)
+  let fech = new Date(today.getFullYear(), today.getMonth(), 13)
+  if (fech <= today) fech = new Date(today.getFullYear(), today.getMonth()+1, 13)
+  const dFat = daysBetween(today, fech)
+  const elF = document.getElementById('hctx-fatura-d')
+  if (elF) elF.textContent = `${dFat} dias`
+
+  // Favoritos sync
+  const favJ = document.getElementById('fav-japao-stat')
+  if (favJ) favJ.textContent = `${dJapao} dias · 4 ingressos pendentes`
+  const favC = document.getElementById('fav-cartao-stat')
+  if (favC) {
+    const meses = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez']
+    favC.textContent = `R$ 3.4k · fecha 13/${meses[fech.getMonth()]}`
+  }
+}
+
+// Quick actions não devem propagar pro link pai (ainda sem deeplink real)
+document.querySelectorAll('.app-quick').forEach(q => {
+  q.addEventListener('click', e => { /* deixa propagar — abre o app */ })
+})
+
 // initial paint
+renderHero()
 updateCount()
 loadData()
 setInterval(loadData, 5*60*1000)
+setInterval(renderHero, 60*60*1000)
 </script>
 </body>
 </html>

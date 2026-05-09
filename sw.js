@@ -1,4 +1,4 @@
-const CACHE = 'hub-v24'
+const CACHE = 'hub-v25'
 const ASSETS = ['/manifest.json', '/favicon.svg', '/icon-192-v2.png', '/icon-512-v2.png']
 
 self.addEventListener('install', e => {

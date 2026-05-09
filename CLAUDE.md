@@ -1,5 +1,8 @@
 ﻿# SuperApp Hub — Rodrigo Coelho
 
+## Histórico de versões
+- **v25 (2026-05-09)** — Redesign visual: hero contextual (3 linhas dinâmicas: Japão / FII PU / Fatura XP), seção "⭐ Favoritos" com 2 cards grandes (Japão 2026 + Cartão XP), badges de atividade tri-state (verde/âmbar/vermelho) substituindo `live-dot`, quick actions inline em RC Finanças (+ lançar gasto), CFG (▶ quiz rápido) e Japão (🔊 frases JP). CACHE bump v24→v25.
+
 ## O que é este projeto
 
 Hub central PWA que concentra todos os apps criados pelo Rodrigo com Claude.
