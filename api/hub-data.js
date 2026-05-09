@@ -1,4 +1,4 @@
-// Vercel Serverless Function — agrega dados reais de todos os apps
+﻿// Vercel Serverless Function — agrega dados reais de todos os apps
 
 module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*')
@@ -6,7 +6,7 @@ module.exports = async function handler(req, res) {
 
   const [cfg, tcuFgts, tcuMcmv] = await Promise.allSettled([
     fetchCfg(),
-    fetchTcuCount('https://tcu-fgts.vercel.app/'),
+    fetchTcuCount('https://rc-tcu.vercel.app/'),
     fetchTcuCount('https://tcu-mcmv-fgts.vercel.app/'),
   ])
 
@@ -24,7 +24,7 @@ module.exports = async function handler(req, res) {
 }
 
 async function fetchCfg() {
-  const r = await fetch('https://cfg-app.vercel.app/api/diagnostico')
+  const r = await fetch('https://rc-cfg.vercel.app/api/diagnostico')
   const d = await r.json()
   const totalRespondidas = d.stats.reduce((s, m) => s + m.totalRespondidas, 0)
   const modulos = d.stats.map(m => ({
