@@ -1,6 +1,7 @@
 ﻿# SuperApp Hub — Rodrigo Coelho
 
 ## Histórico de versões
+- **v26 (2026-05-13)** — Novo app: Kindle Bibliotecário (📖) — chat com IA para 1.243 ebooks Kindle. Categoria `prod`, cor amber. CACHE bump v25→v26.
 - **v25 (2026-05-09)** — Redesign visual: hero contextual (3 linhas dinâmicas: Japão / FII PU / Fatura XP), seção "⭐ Favoritos" com 2 cards grandes (Japão 2026 + Cartão XP), badges de atividade tri-state (verde/âmbar/vermelho) substituindo `live-dot`, quick actions inline em RC Finanças (+ lançar gasto), CFG (▶ quiz rápido) e Japão (🔊 frases JP). CACHE bump v24→v25.
 
 ## O que é este projeto
@@ -32,6 +33,7 @@ Acessível no browser e no celular (instalável como app).
 | Star Wars | https://rc-starwars.vercel.app/ | Next.js / Vercel |
 | Claude (antes: Mastery Hub) | https://rc-mastery-claude.vercel.app/ | HTML estático / Vercel |
 | SaxPath | https://rc-saxofone.vercel.app/ | HTML estático / Vercel |
+| Kindle Bibliotecário | https://rc-kindle-rodrigo.vercel.app/ | HTML estático / Vercel |
 
 **RC** consome dados do **Fatura XP** via `data/cartao.json` (atualizado pelo script `scripts/sync-cartao.mjs` no projeto RC).
 
