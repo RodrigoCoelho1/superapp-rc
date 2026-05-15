@@ -147,13 +147,13 @@
       padding:0 22px;
       display:grid;
       grid-template-columns:repeat(auto-fill,minmax(150px,1fr));
-      gap:12px;
+      gap:14px;
     }
 
     .app{
       position:relative;overflow:hidden;
       min-height:170px;
-      border-radius:20px;
+      border-radius:22px;
       padding:14px 14px 12px;
       background:var(--glass);
       border:1px solid var(--border);
@@ -328,22 +328,89 @@
     .sheet-close:active{background:var(--glass)}
 
     /* ── REFRESH ───────────────────────────────────── */
-    .refresh-btn{
-      position:fixed;
-      top:calc(18px + var(--safe-top));
-      right:76px;
-      background:var(--glass2);
-      border:1px solid var(--border);
-      border-radius:99px;
-      padding:6px 13px;
-      font-size:.7rem;font-weight:600;
-      color:var(--muted2);cursor:pointer;z-index:60;
-      backdrop-filter:blur(8px);
-      -webkit-tap-highlight-color:transparent;
-      transition:color .2s;
-    }
-    .refresh-btn.spin{animation:rspin .7s linear infinite}
     @keyframes rspin{to{transform:rotate(360deg)}}
+
+    /* ── PILL COUNT ───────────────────────── */
+    .pill-count{
+      font-size:.65rem;font-weight:700;
+      background:rgba(255,255,255,.08);
+      border-radius:99px;
+      padding:1px 6px;
+      color:var(--muted);
+      margin-left:2px;
+    }
+    .cat-pill.active .pill-count{
+      background:rgba(79,142,247,.2);
+      color:var(--accent);
+    }
+
+    /* ── HIGHLIGHT CARDS (Destaques) ────────── */
+    .highlight-grid{
+      padding:0 22px;
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:14px;
+      margin-bottom:4px;
+    }
+    @media(max-width:360px){.highlight-grid{grid-template-columns:1fr}}
+
+    .hcard{
+      position:relative;overflow:hidden;
+      border-radius:22px;
+      padding:16px;
+      display:flex;flex-direction:column;
+      text-decoration:none;color:var(--text);
+      cursor:pointer;-webkit-tap-highlight-color:transparent;
+      backdrop-filter:blur(12px);
+      transition:transform .15s,border-color .2s;
+      min-height:140px;
+    }
+    .hcard:active{transform:scale(.97)}
+
+    .hcard-japao{
+      background:linear-gradient(135deg,rgba(167,139,250,.14) 0%,rgba(79,142,247,.08) 100%);
+      border:1px solid rgba(167,139,250,.3);
+    }
+    .hcard-cfg{
+      background:linear-gradient(135deg,rgba(34,197,94,.12) 0%,rgba(6,182,212,.06) 100%);
+      border:1px solid rgba(34,197,94,.28);
+    }
+    .hcard::before{
+      content:'';position:absolute;inset:0;pointer-events:none;
+      background:linear-gradient(135deg,rgba(255,255,255,.04) 0%,transparent 60%);
+    }
+
+    .hcard-badge{
+      font-size:.62rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+      color:var(--muted2);margin-bottom:8px;
+      display:flex;align-items:center;gap:5px;
+    }
+    .hcard-badge .live-dot{margin:0}
+    .hcard-emoji{font-size:1.5rem;line-height:1;margin-bottom:8px}
+    .hcard-title{font-size:.95rem;font-weight:800;letter-spacing:-.01em;line-height:1.2}
+    .hcard-sub{font-size:.67rem;color:var(--muted);margin-top:3px;line-height:1.4}
+    .hcard-stat{margin-top:auto;padding-top:10px}
+    .hcard-num{font-size:1.75rem;font-weight:800;letter-spacing:-.04em;line-height:1;color:#f0f4ff}
+    .hcard-cfg .hcard-num{color:#22c55e}
+    .hcard-lbl{
+      font-size:.58rem;color:var(--muted);
+      text-transform:uppercase;letter-spacing:.06em;
+      font-weight:600;margin-top:3px;
+    }
+
+    /* ── HEADER REFRESH ─────────────────── */
+    .header-actions{display:flex;align-items:center;gap:8px;flex-shrink:0;margin-top:4px}
+    .header-refresh{
+      width:36px;height:36px;border-radius:50%;
+      background:var(--glass2);border:1px solid var(--border);
+      display:flex;align-items:center;justify-content:center;
+      font-size:.95rem;color:var(--muted2);
+      cursor:pointer;-webkit-tap-highlight-color:transparent;
+      transition:color .2s,background .2s;
+    }
+    .header-refresh:active{background:var(--glass)}
+    .header-refresh.spin{animation:rspin .7s linear infinite}
+
   </style>
 </head>
 <body>
@@ -355,7 +422,6 @@
   <div class="orb orb3"></div>
 </div>
 
-<button class="refresh-btn" id="rbtn" onclick="loadData(true)">↻</button>
 
 <div id="app">
 
@@ -364,9 +430,12 @@
     <div class="header-left">
       <div class="header-eyebrow">Olá, Rodrigo 👋</div>
       <div class="header-title">SuperApp</div>
-      <div class="header-sub" id="header-sub">Hub pessoal · todos os apps em um lugar</div>
+      <div class="header-sub" id="header-sub">Hub pessoal · carregando…</div>
     </div>
-    <div class="avatar-btn" onclick="openSheet()">RC</div>
+    <div class="header-actions">
+      <div class="header-refresh" id="rbtn" onclick="loadData(true)" title="Atualizar">↻</div>
+      <div class="avatar-btn" onclick="openSheet()">RC</div>
+    </div>
   </div>
 
   <!-- SEARCH -->
@@ -380,15 +449,45 @@
   <!-- CATEGORIAS -->
   <div class="cats-wrap">
     <div class="cats">
-      <div class="cat-pill active" onclick="filter('all',this)"><span class="e">🏠</span>Todos</div>
-      <div class="cat-pill" onclick="filter('financas',this)"><span class="e">📊</span>Finanças</div>
-      <div class="cat-pill" onclick="filter('viagem',this)"><span class="e">✈️</span>Viagem</div>
-      <div class="cat-pill" onclick="filter('info',this)"><span class="e">📰</span>Notícias</div>
-      <div class="cat-pill" onclick="filter('tcu',this)"><span class="e">⚖️</span>TCU</div>
-      <div class="cat-pill" onclick="filter('prod',this)"><span class="e">✅</span>Produtividade</div>
-      <div class="cat-pill" onclick="filter('foto',this)"><span class="e">📷</span>Fotografia</div>
-      <div class="cat-pill" onclick="filter('cultura',this)"><span class="e">🚀</span>Cultura</div>
+      <div class="cat-pill active" onclick="filter('all',this)"><span class="e">🏠</span>Todos<span class="pill-count" data-cat="all"></span></div>
+      <div class="cat-pill" onclick="filter('financas',this)"><span class="e">📊</span>Finanças<span class="pill-count" data-cat="financas"></span></div>
+      <div class="cat-pill" onclick="filter('viagem',this)"><span class="e">✈️</span>Viagem<span class="pill-count" data-cat="viagem"></span></div>
+      <div class="cat-pill" onclick="filter('info',this)"><span class="e">📰</span>Notícias<span class="pill-count" data-cat="info"></span></div>
+      <div class="cat-pill" onclick="filter('tcu',this)"><span class="e">⚖️</span>TCU<span class="pill-count" data-cat="tcu"></span></div>
+      <div class="cat-pill" onclick="filter('prod',this)"><span class="e">✅</span>Produtividade<span class="pill-count" data-cat="prod"></span></div>
+      <div class="cat-pill" onclick="filter('foto',this)"><span class="e">📷</span>Fotografia<span class="pill-count" data-cat="foto"></span></div>
+      <div class="cat-pill" onclick="filter('cultura',this)"><span class="e">🚀</span>Cultura<span class="pill-count" data-cat="cultura"></span></div>
     </div>
+  </div>
+
+  <!-- DESTAQUES -->
+  <div class="sh">
+    <h2>Destaques</h2>
+  </div>
+  <div class="highlight-grid">
+
+    <a class="hcard hcard-japao" href="https://japao-2026.vercel.app/">
+      <div class="hcard-badge"><span class="live-dot"></span>Ao vivo</div>
+      <div class="hcard-emoji">🇯🇵</div>
+      <div class="hcard-title">Japão 2026</div>
+      <div class="hcard-sub">27 jun – 16 jul · família Coelho</div>
+      <div class="hcard-stat">
+        <div class="hcard-num" id="h-dias"><span class="sk">&nbsp;&nbsp;&nbsp;</span></div>
+        <div class="hcard-lbl">dias restantes</div>
+      </div>
+    </a>
+
+    <a class="hcard hcard-cfg" href="https://cfg-app.vercel.app/">
+      <div class="hcard-badge"><span class="live-dot"></span>Ao vivo</div>
+      <div class="hcard-emoji">📊</div>
+      <div class="hcard-title">CFG App</div>
+      <div class="hcard-sub">Preparação ANBIMA · streak atual</div>
+      <div class="hcard-stat">
+        <div class="hcard-num" id="h-streak"><span class="sk">&nbsp;&nbsp;&nbsp;</span></div>
+        <div class="hcard-lbl">dias de streak</div>
+      </div>
+    </a>
+
   </div>
 
   <!-- APPS -->
@@ -762,7 +861,9 @@ async function loadData(force=false) {
     if (d.japao) {
       const dias = d.japao.diasRestantes
       set('x-dias', dias)
+      set('h-dias', dias)
       set('s-dias', dias)
+      updateHeaderSub(dias)
     }
 
     // TCU
@@ -772,8 +873,10 @@ async function loadData(force=false) {
     // CFG
     if (d.cfg) {
       set('x-streak', d.cfg.streakDias)
+      set('h-streak', d.cfg.streakDias)
     } else {
       set('x-streak', '—')
+      set('h-streak', '—')
     }
 
   } catch(e) {
@@ -784,7 +887,40 @@ async function loadData(force=false) {
   }
 }
 
+
+// ── Pill counts ─────────────────────────────────────────────────
+function buildPillCounts() {
+  const apps = document.querySelectorAll('.app')
+  const counts = {}
+  let total = 0
+  apps.forEach(a => {
+    const cat = a.dataset.cat
+    if (cat) counts[cat] = (counts[cat] || 0) + 1
+    total++
+  })
+  document.querySelectorAll('.pill-count').forEach(el => {
+    const cat = el.dataset.cat
+    el.textContent = cat === 'all' ? total : (counts[cat] || 0)
+  })
+}
+
+// ── Header sub dinâmico ────────────────────────────────────────
+function updateHeaderSub(diasJapao) {
+  const dias = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb']
+  const meses = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez']
+  const now = new Date()
+  const dow = dias[now.getDay()]
+  const d = now.getDate()
+  const m = meses[now.getMonth()]
+  const el = document.getElementById('header-sub')
+  if (!el) return
+  const base = `${dow}, ${d} ${m}`
+  el.textContent = diasJapao != null ? `${base} · ${diasJapao}d para o Japão ✈️` : base
+}
+
 // initial paint
+buildPillCounts()
+updateHeaderSub(null)
 updateCount()
 loadData()
 setInterval(loadData, 5*60*1000)
