@@ -22,9 +22,9 @@
       --bg:       #080b14;
       --bg2:      #0d1120;
       --glass:    rgba(255,255,255,0.04);
-      --glass2:   rgba(255,255,255,0.08);
-      --border:   rgba(255,255,255,0.08);
-      --border2:  rgba(255,255,255,0.14);
+      --glass2:   rgba(255,255,255,0.07);
+      --border:   rgba(255,255,255,0.07);
+      --border2:  rgba(255,255,255,0.12);
       --text:     #f0f4ff;
       --muted:    #6b7a99;
       --muted2:   #8892aa;
@@ -46,14 +46,13 @@
       overflow-x:hidden;
     }
 
-    /* ── BACKGROUND ORBS ──────────────────────────── */
+    /* ── ORBS ─────────────────────────────────────── */
     .orbs{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
-    .orb{position:absolute;border-radius:50%;filter:blur(80px);opacity:.18}
-    .orb1{width:400px;height:400px;background:#4f8ef7;top:-100px;right:-80px}
-    .orb2{width:300px;height:300px;background:#7c3aed;bottom:200px;left:-80px}
-    .orb3{width:200px;height:200px;background:#06b6d4;bottom:400px;right:50px}
+    .orb{position:absolute;border-radius:50%;filter:blur(90px);opacity:.14}
+    .orb1{width:500px;height:500px;background:#4f8ef7;top:-150px;right:-120px}
+    .orb2{width:350px;height:350px;background:#7c3aed;bottom:150px;left:-100px}
+    .orb3{width:250px;height:250px;background:#06b6d4;bottom:350px;right:30px}
 
-    /* ── SCROLL CONTAINER ─────────────────────────── */
     #app{
       position:relative;z-index:1;
       padding-bottom:calc(90px + var(--safe-bot));
@@ -61,125 +60,216 @@
 
     /* ── HEADER ───────────────────────────────────── */
     .header{
-      padding:calc(20px + var(--safe-top)) 22px 16px;
-      display:flex;align-items:flex-start;justify-content:space-between;
-    }
-    .header-eyebrow{
-      font-size:.72rem;font-weight:500;letter-spacing:.08em;
-      text-transform:uppercase;color:var(--muted2);margin-bottom:4px;
+      padding:calc(16px + var(--safe-top)) 22px 20px;
+      display:flex;align-items:center;justify-content:space-between;
     }
     .header-title{
-      font-size:1.75rem;font-weight:800;letter-spacing:-.03em;
-      background:linear-gradient(135deg,#f0f4ff 30%,#a5b4fc);
+      font-size:1.55rem;font-weight:800;letter-spacing:-.03em;
+      background:linear-gradient(135deg,#f0f4ff 40%,#a5b4fc);
       -webkit-background-clip:text;-webkit-text-fill-color:transparent;
       background-clip:text;
     }
-    .header-sub{
-      font-size:.78rem;color:var(--muted2);margin-top:4px;font-weight:500;
+    .header-date{
+      font-size:.72rem;color:var(--muted);margin-top:3px;font-weight:500;
+      letter-spacing:.01em;
     }
-
+    .header-right{display:flex;align-items:center;gap:10px}
+    .refresh-btn{
+      width:34px;height:34px;border-radius:50%;
+      background:var(--glass2);border:1px solid var(--border);
+      display:flex;align-items:center;justify-content:center;
+      font-size:.9rem;color:var(--muted2);
+      cursor:pointer;-webkit-tap-highlight-color:transparent;
+      transition:color .2s,background .2s;
+    }
+    .refresh-btn:active{background:var(--glass)}
+    .refresh-btn.spin{animation:rspin .7s linear infinite}
+    @keyframes rspin{to{transform:rotate(360deg)}}
     .avatar-btn{
-      width:44px;height:44px;border-radius:50%;
+      width:36px;height:36px;border-radius:50%;
       background:linear-gradient(135deg,#4f8ef7,#7c3aed);
       display:flex;align-items:center;justify-content:center;
-      font-size:.85rem;font-weight:800;color:#fff;
+      font-size:.78rem;font-weight:800;color:#fff;
       border:2px solid rgba(255,255,255,.15);
-      cursor:pointer;flex-shrink:0;margin-top:4px;
-      box-shadow:0 4px 20px rgba(79,142,247,.3);
+      cursor:pointer;flex-shrink:0;
+      box-shadow:0 4px 16px rgba(79,142,247,.25);
       transition:transform .15s;
     }
     .avatar-btn:active{transform:scale(.92)}
 
-    /* ── SEARCH ───────────────────────────────────── */
-    .search{margin:4px 22px 20px;position:relative}
-    .search input{
-      width:100%;
+    /* ── HERO CARD (Japão) ────────────────────────── */
+    .hero-wrap{padding:0 18px;margin-bottom:14px}
+    .hero-card{
+      position:relative;overflow:hidden;
+      border-radius:24px;
+      padding:22px 24px;
+      background:linear-gradient(135deg,#1e1b4b 0%,#312e81 40%,#1e3a5f 100%);
+      border:1px solid rgba(167,139,250,.25);
+      display:flex;align-items:flex-end;justify-content:space-between;
+      min-height:148px;
+      text-decoration:none;color:var(--text);
+      cursor:pointer;-webkit-tap-highlight-color:transparent;
+      transition:transform .15s;
+    }
+    .hero-card:active{transform:scale(.985)}
+    /* noise texture overlay */
+    .hero-card::before{
+      content:'';position:absolute;inset:0;pointer-events:none;
+      background:
+        radial-gradient(ellipse at 80% 20%, rgba(167,139,250,.2) 0%, transparent 55%),
+        linear-gradient(180deg,rgba(255,255,255,.04) 0%,transparent 100%);
+    }
+    .hero-left{position:relative;z-index:1;flex:1;min-width:0}
+    .hero-live{
+      display:inline-flex;align-items:center;gap:5px;
+      font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+      color:rgba(196,181,253,.8);margin-bottom:12px;
+    }
+    .hero-live-dot{
+      width:5px;height:5px;border-radius:50%;
+      background:#a78bfa;
+      box-shadow:0 0 6px rgba(167,139,250,.8);
+      animation:livepulse 2s ease-in-out infinite;
+    }
+    @keyframes livepulse{0%,100%{opacity:1}50%{opacity:.4}}
+    .hero-emoji{font-size:2rem;line-height:1;margin-bottom:8px;display:block}
+    .hero-title{
+      font-size:1.15rem;font-weight:800;letter-spacing:-.02em;
+      color:#fff;line-height:1.2;
+    }
+    .hero-sub{
+      font-size:.7rem;color:rgba(196,181,253,.7);margin-top:4px;
+      font-weight:500;
+    }
+    .hero-right{
+      position:relative;z-index:1;
+      text-align:right;flex-shrink:0;padding-left:16px;
+    }
+    .hero-num{
+      font-size:4.5rem;font-weight:900;letter-spacing:-.06em;
+      line-height:.9;
+      color:#fff;
+      text-shadow:0 0 40px rgba(167,139,250,.5);
+    }
+    .hero-unit{
+      font-size:.65rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+      color:rgba(196,181,253,.6);margin-top:4px;
+    }
+
+    /* ── SECONDARY STRIP ──────────────────────────── */
+    .sec-strip{
+      overflow-x:auto;scrollbar-width:none;
+      padding:0 18px 2px;
+      display:flex;gap:10px;
+      margin-bottom:20px;
+    }
+    .sec-strip::-webkit-scrollbar{display:none}
+    .sec-card{
+      flex-shrink:0;
+      width:150px;
+      border-radius:18px;
+      padding:14px 16px;
       background:var(--glass2);
       border:1px solid var(--border2);
-      border-radius:16px;
-      padding:14px 18px 14px 46px;
-      color:var(--text);font-size:.9rem;font-weight:400;
-      outline:none;-webkit-appearance:none;
-      backdrop-filter:blur(12px);
-      transition:border-color .2s,background .2s;
+      text-decoration:none;color:var(--text);
+      cursor:pointer;-webkit-tap-highlight-color:transparent;
+      transition:transform .15s;
+      display:flex;flex-direction:column;
     }
-    .search input:focus{
-      border-color:rgba(79,142,247,.5);
-      background:rgba(255,255,255,.07);
+    .sec-card:active{transform:scale(.96)}
+    .sec-emoji{font-size:1.3rem;line-height:1;margin-bottom:8px}
+    .sec-name{font-size:.78rem;font-weight:700;letter-spacing:-.01em}
+    .sec-stat{
+      margin-top:auto;padding-top:10px;
+      font-size:1.3rem;font-weight:800;letter-spacing:-.03em;
+      line-height:1;
     }
-    .search input::placeholder{color:var(--muted)}
-    .search-icon{
-      position:absolute;left:15px;top:50%;transform:translateY(-50%);
-      color:var(--muted);pointer-events:none;
-    }
+    .sec-lbl{font-size:.58rem;color:var(--muted);text-transform:uppercase;
+      letter-spacing:.06em;font-weight:600;margin-top:2px;}
+    .sec-card.cfg .sec-stat{color:#22c55e}
+    .sec-card.fatura .sec-stat{color:#f59e0b}
 
     /* ── CATEGORIES ───────────────────────────────── */
-    .cats-wrap{overflow-x:auto;scrollbar-width:none;padding:0 22px 2px}
+    .cats-wrap{overflow-x:auto;scrollbar-width:none;padding:0 18px 14px}
     .cats-wrap::-webkit-scrollbar{display:none}
-    .cats{display:flex;gap:8px;width:max-content}
-
+    .cats{display:flex;gap:6px;width:max-content}
     .cat-pill{
-      display:flex;align-items:center;gap:7px;
-      padding:8px 14px;border-radius:99px;
+      display:flex;align-items:center;gap:5px;
+      padding:6px 11px;border-radius:99px;
       border:1px solid var(--border);
       background:var(--glass);
       cursor:pointer;-webkit-tap-highlight-color:transparent;
-      font-size:.78rem;font-weight:600;color:var(--muted2);
-      white-space:nowrap;transition:all .2s;
+      font-size:.72rem;font-weight:600;color:var(--muted2);
+      white-space:nowrap;transition:all .15s;
     }
-    .cat-pill .e{font-size:.95rem}
+    .cat-pill .e{font-size:.85rem}
     .cat-pill.active{
-      background:rgba(79,142,247,.15);
-      border-color:rgba(79,142,247,.4);
+      background:rgba(79,142,247,.12);
+      border-color:rgba(79,142,247,.35);
       color:var(--accent);
     }
     .cat-pill:active{transform:scale(.95)}
-
-    /* ── SECTION HEADER ───────────────────────────── */
-    .sh{
-      display:flex;align-items:baseline;justify-content:space-between;
-      padding:24px 22px 14px;
+    .pill-count{
+      font-size:.6rem;font-weight:700;
+      background:rgba(255,255,255,.08);
+      border-radius:99px;padding:1px 5px;
+      color:var(--muted);margin-left:1px;
     }
-    .sh h2{font-size:1.05rem;font-weight:700;letter-spacing:-.01em}
-    .sh .count{font-size:.72rem;color:var(--muted);font-weight:600}
+    .cat-pill.active .pill-count{background:rgba(79,142,247,.18);color:var(--accent)}
 
-    /* ── APPS GRID ─────────────────────────────────── */
+    /* ── SECTION LABEL ────────────────────────────── */
+    .sec-label{
+      padding:0 22px 12px;
+      font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+      color:var(--muted);
+    }
+
+    /* ── APP GRID ─────────────────────────────────── */
     .app-grid{
-      padding:0 22px;
+      padding:0 18px;
       display:grid;
-      grid-template-columns:repeat(auto-fill,minmax(150px,1fr));
-      gap:12px;
+      grid-template-columns:repeat(3,1fr);
+      gap:10px;
     }
 
     .app{
       position:relative;overflow:hidden;
-      min-height:170px;
-      border-radius:20px;
-      padding:14px 14px 12px;
+      border-radius:18px;
+      padding:14px 10px 12px;
       background:var(--glass);
       border:1px solid var(--border);
       display:flex;flex-direction:column;
+      align-items:center;text-align:center;
       text-decoration:none;color:var(--text);
       cursor:pointer;-webkit-tap-highlight-color:transparent;
-      backdrop-filter:blur(8px);
-      transition:transform .15s,border-color .2s,background .2s;
+      transition:transform .15s,background .15s;
+      min-height:88px;
     }
-    .app:active{transform:scale(.96);border-color:var(--border2)}
-    .app:hover{background:var(--glass2);border-color:var(--border2)}
+    .app:active{transform:scale(.94);background:var(--glass2)}
+    .app:hover{background:var(--glass2)}
     .app.hidden{display:none}
 
-    /* sutil overlay diagonal pra dar profundidade */
-    .app::before{
-      content:'';position:absolute;inset:0;pointer-events:none;
-      background:linear-gradient(135deg,rgba(255,255,255,.03) 0%,transparent 60%);
+    .app-emoji{
+      font-size:1.65rem;line-height:1;
+      margin-bottom:7px;
+    }
+    .app-name{
+      font-size:.72rem;font-weight:700;letter-spacing:-.01em;
+      line-height:1.25;
+      color:var(--text);
     }
 
-    /* barra de cor à esquerda por categoria */
+    /* esconder elementos não necessários no grid compacto */
+    .app-top .app-badge,
+    .app-sub,.app-stat,.app-quick,
+    .app-top .live-dot{ display:none }
+
+    /* dot de categoria: borda inferior colorida */
     .app::after{
-      content:'';position:absolute;left:0;top:14px;bottom:14px;
-      width:3px;border-radius:0 3px 3px 0;
+      content:'';position:absolute;bottom:0;left:20%;right:20%;
+      height:2px;border-radius:2px 2px 0 0;
       background:var(--cat-color, var(--accent));
-      opacity:.85;
+      opacity:.7;
     }
     .app[data-cat="financas"] {--cat-color:#3b82f6}
     .app[data-cat="viagem"]   {--cat-color:#a78bfa}
@@ -190,118 +280,28 @@
     .app[data-cat="cultura"]  {--cat-color:#f5c518}
     .app[data-cat="musica"]   {--cat-color:#f43f5e}
 
-    .app-top{
-      display:flex;align-items:flex-start;justify-content:space-between;
-      gap:8px;position:relative;z-index:1;
-    }
-    .app-emoji{
-      font-size:1.7rem;line-height:1;
-      filter:drop-shadow(0 2px 6px rgba(0,0,0,.3));
-    }
-    .live-dot{
-      width:6px;height:6px;border-radius:50%;
-      background:var(--green);
-      box-shadow:0 0 8px rgba(34,197,94,.6);
-      animation:livepulse 2s ease-in-out infinite;
-      margin-top:6px;
-    }
-    @keyframes livepulse{0%,100%{box-shadow:0 0 4px rgba(34,197,94,.4)}
-      50%{box-shadow:0 0 10px rgba(34,197,94,.8)}}
-
-    .app-name{
-      font-size:.92rem;font-weight:700;letter-spacing:-.01em;
-      margin-top:10px;line-height:1.2;
-      position:relative;z-index:1;
-    }
-    .app-sub{
-      font-size:.68rem;color:var(--muted);
-      margin-top:3px;line-height:1.35;
-      position:relative;z-index:1;
-      display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;
-      overflow:hidden;
-    }
-
-    .app-stat{
-      margin-top:auto;padding-top:12px;
-      position:relative;z-index:1;
-    }
-    .app-stat-num{
-      font-size:1.6rem;font-weight:800;letter-spacing:-.03em;
-      line-height:1;display:block;
-      background:linear-gradient(135deg,#f0f4ff,#cbd5e1);
-      -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-      background-clip:text;
-    }
-    .app-stat-num.sm{font-size:1.05rem}
-    .app-stat-lbl{
-      font-size:.58rem;color:var(--muted);
-      text-transform:uppercase;letter-spacing:.06em;
-      font-weight:600;margin-top:3px;display:block;
-    }
-
-    /* ── HERO CONTEXTUAL ──────────────────────────── */
-    .hero-context{
-      margin:8px 22px 16px;padding:14px 16px;
-      background:linear-gradient(135deg,rgba(79,142,247,.12),rgba(124,58,237,.12));
-      border:1px solid rgba(79,142,247,.2);border-radius:18px;
-      display:flex;flex-direction:column;gap:8px;
-    }
-    .hctx-row{display:flex;align-items:center;gap:10px;font-size:.82rem;font-weight:500;color:#cbd5e1}
-    .hctx-row .ico{font-size:1.05rem;flex-shrink:0;width:22px;text-align:center}
-    .hctx-row .txt{flex:1;min-width:0}
-    .hctx-row b{color:#fff;font-weight:700}
-    .hctx-row .pill{font-size:.62rem;background:rgba(244,63,94,.2);color:#fda4af;padding:2px 8px;border-radius:99px;font-weight:600;margin-left:auto;text-transform:uppercase;letter-spacing:.04em;flex-shrink:0}
-    .hctx-row .pill.amber{background:rgba(245,158,11,.18);color:#fcd34d}
-    .hctx-row .pill.green{background:rgba(34,197,94,.18);color:#86efac}
-    .hctx-row .pill.red{background:rgba(244,63,94,.22);color:#fda4af}
-
-    /* ── FAVORITOS ────────────────────────────────── */
-
-    /* ── BADGE DE ATIVIDADE ───────────────────────── */
-    .app-badge{
-      width:9px;height:9px;border-radius:50%;
-      margin-top:6px;flex-shrink:0;
-    }
-    .app-badge.dot-green{background:var(--green);box-shadow:0 0 8px rgba(34,197,94,.6);animation:badgepulse 2s infinite}
-    .app-badge.dot-amber{background:var(--amber);box-shadow:0 0 8px rgba(245,158,11,.6)}
-    .app-badge.dot-red{background:var(--red);box-shadow:0 0 8px rgba(244,63,94,.6)}
-    @keyframes badgepulse{0%,100%{box-shadow:0 0 4px rgba(34,197,94,.4)}50%{box-shadow:0 0 12px rgba(34,197,94,.85)}}
-
-    /* ── QUICK ACTION ─────────────────────────────── */
-    .app-quick{
-      margin-top:8px;padding:6px 10px;
-      background:rgba(79,142,247,.12);border:1px solid rgba(79,142,247,.25);
-      border-radius:10px;font-size:.66rem;font-weight:700;color:#a5b4fc;
-      text-align:center;letter-spacing:.02em;
-      position:relative;z-index:2;
-      transition:background .2s;
-    }
-    .app-quick:hover{background:rgba(79,142,247,.22)}
-
-    /* ── SKELETON ──────────────────────────────────── */
+    /* ── SKELETON ────────────────────────────────── */
     .sk{
-      display:inline-block;height:.8em;border-radius:4px;
-      background:linear-gradient(90deg,var(--glass2) 25%,rgba(255,255,255,.06) 50%,var(--glass2) 75%);
+      display:inline-block;height:.85em;border-radius:4px;
+      background:linear-gradient(90deg,var(--glass2) 25%,rgba(255,255,255,.05) 50%,var(--glass2) 75%);
       background-size:200% 100%;
-      animation:shimmer 1.5s infinite;min-width:24px;
+      animation:shimmer 1.5s infinite;min-width:28px;
     }
     @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
 
-    /* ── EMPTY ─────────────────────────────────────── */
     .empty{
       grid-column:1/-1;text-align:center;
-      padding:40px 20px;color:var(--muted);
-      font-size:.82rem;
+      padding:40px 20px;color:var(--muted);font-size:.82rem;
     }
 
-    /* ── BOTTOM NAV ────────────────────────────────── */
+    /* ── BOTTOM NAV ───────────────────────────────── */
     .bnav{
       position:fixed;bottom:0;left:0;right:0;z-index:50;
       padding:0 12px calc(10px + var(--safe-bot));
     }
     .bnav-inner{
-      background:rgba(13,17,32,.85);
-      backdrop-filter:blur(20px);
+      background:rgba(8,11,20,.9);
+      backdrop-filter:blur(24px);
       border:1px solid var(--border2);
       border-radius:24px;
       display:flex;justify-content:space-around;align-items:center;
@@ -320,7 +320,10 @@
     .bni.active svg{transform:scale(1.1)}
     .bni:active{background:var(--glass2)}
 
-    /* ── PROFILE SHEET ─────────────────────────────── */
+    /* ── SEARCH (oculta no topo, usada via nav) ────── */
+    .search{display:none}
+
+    /* ── PROFILE SHEET ────────────────────────────── */
     #sheet-bg{
       display:none;position:fixed;inset:0;z-index:100;
       background:rgba(0,0,0,.6);backdrop-filter:blur(6px);
@@ -367,83 +370,8 @@
     }
     .sheet-close:active{background:var(--glass)}
 
-    /* ── REFRESH ───────────────────────────────────── */
-    .refresh-btn{
-      position:fixed;
-      top:calc(18px + var(--safe-top));
-      right:76px;
-      background:var(--glass2);
-      border:1px solid var(--border);
-      border-radius:99px;
-      padding:6px 13px;
-      font-size:.7rem;font-weight:600;
-      color:var(--muted2);cursor:pointer;z-index:60;
-      backdrop-filter:blur(8px);
-      -webkit-tap-highlight-color:transparent;
-      transition:color .2s;
-    }
-    .refresh-btn.spin{animation:rspin .7s linear infinite}
-    @keyframes rspin{to{transform:rotate(360deg)}}
-
-    /* ── HIGHLIGHT CARDS (Destaques) ──────────── */
-    .highlight-grid{
-      padding:0 22px;
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:12px;
-      margin-bottom:4px;
-    }
-    @media(max-width:360px){.highlight-grid{grid-template-columns:1fr}}
-
-    .hcard{
-      position:relative;overflow:hidden;
-      border-radius:22px;
-      padding:16px;
-      display:flex;flex-direction:column;
-      text-decoration:none;color:var(--text);
-      cursor:pointer;-webkit-tap-highlight-color:transparent;
-      backdrop-filter:blur(12px);
-      transition:transform .15s,border-color .2s;
-      min-height:140px;
-    }
-    .hcard:active{transform:scale(.97)}
-    .hcard-japao{
-      background:linear-gradient(135deg,rgba(167,139,250,.16) 0%,rgba(79,142,247,.08) 100%);
-      border:1px solid rgba(167,139,250,.35);
-    }
-    .hcard-cfg{
-      background:linear-gradient(135deg,rgba(34,197,94,.13) 0%,rgba(6,182,212,.07) 100%);
-      border:1px solid rgba(34,197,94,.3);
-    }
-    .hcard::before{content:'';position:absolute;inset:0;pointer-events:none;
-      background:linear-gradient(135deg,rgba(255,255,255,.04) 0%,transparent 60%);}
-    .hcard-badge{
-      font-size:.6rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
-      color:var(--muted2);margin-bottom:8px;
-      display:flex;align-items:center;gap:5px;
-    }
-    .hcard-badge .live-dot{margin:0}
-    .hcard-emoji{font-size:1.5rem;line-height:1;margin-bottom:8px}
-    .hcard-title{font-size:.95rem;font-weight:800;letter-spacing:-.01em;line-height:1.2}
-    .hcard-sub{font-size:.67rem;color:var(--muted);margin-top:3px;line-height:1.4}
-    .hcard-stat{margin-top:auto;padding-top:10px}
-    .hcard-num{font-size:1.75rem;font-weight:800;letter-spacing:-.04em;line-height:1;color:#f0f4ff}
-    .hcard-cfg .hcard-num{color:#22c55e}
-    .hcard-lbl{font-size:.58rem;color:var(--muted);text-transform:uppercase;
-      letter-spacing:.06em;font-weight:600;margin-top:3px;}
-
-    /* ── PILL COUNT ─────────────────────────────── */
-    .pill-count{
-      font-size:.62rem;font-weight:700;
-      background:rgba(255,255,255,.08);
-      border-radius:99px;padding:1px 6px;
-      color:var(--muted);margin-left:2px;
-    }
-    .cat-pill.active .pill-count{background:rgba(79,142,247,.2);color:var(--accent)}
-
   </style>
 </head>
-<body>
 
 <!-- Background orbs -->
 <div class="orbs">
@@ -452,72 +380,60 @@
   <div class="orb orb3"></div>
 </div>
 
-<button class="refresh-btn" id="rbtn" onclick="loadData(true)">↻</button>
-
 <div id="app">
 
   <!-- HEADER -->
   <div class="header">
-    <div class="header-left">
-      <div class="header-eyebrow">Olá, Rodrigo 👋</div>
+    <div>
       <div class="header-title">SuperApp</div>
-      <div class="header-sub" id="header-sub"></div>
+      <div class="header-date" id="header-date"></div>
     </div>
-    <div class="avatar-btn" onclick="openSheet()">RC</div>
-  </div>
-
-  <!-- HERO CONTEXTUAL -->
-  <div class="hero-context" id="hero-context">
-    <div class="hctx-row">
-      <span class="ico">🇯🇵</span>
-      <span class="txt"><b id="hctx-japao-d">—</b> pro Japão · embarque 27/jun (QR780)</span>
-      <span class="pill green" id="hctx-japao-pill">no prazo</span>
-    </div>
-    <div class="hctx-row">
-      <span class="ico">⚖️</span>
-      <span class="txt">Anteprojeto FII PU — devolver pra Thais até <b>segunda</b></span>
-      <span class="pill amber">2 dias</span>
-    </div>
-    <div class="hctx-row">
-      <span class="ico">💳</span>
-      <span class="txt">Fatura XP fecha em <b id="hctx-fatura-d">—</b> · 3 gastos não categorizados</span>
-      <span class="pill">ação</span>
+    <div class="header-right">
+      <div class="refresh-btn" id="rbtn" onclick="loadData(true)" title="Atualizar">↻</div>
+      <div class="avatar-btn" onclick="openSheet()">RC</div>
     </div>
   </div>
 
-  <!-- SEARCH -->
-  <div class="search">
-    <svg class="search-icon" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2">
-      <circle cx="7.5" cy="7.5" r="5.5"/><line x1="12" y1="12" x2="16" y2="16"/>
-    </svg>
-    <input id="srch" type="search" placeholder="Buscar app, categoria…" autocomplete="off"/>
-  </div>
-
-
-  <!-- DESTAQUES -->
-  <div class="sh" style="padding:4px 22px 12px"><h2>Destaques</h2></div>
-  <div class="highlight-grid">
-
-    <a class="hcard hcard-japao" href="https://rc-japao.vercel.app/">
-      <div class="hcard-badge"><span class="live-dot"></span>Ao vivo</div>
-      <div class="hcard-emoji">🇯🇵</div>
-      <div class="hcard-title">Japão 2026</div>
-      <div class="hcard-sub">27 jun – 16 jul · família Coelho</div>
-      <div class="hcard-stat">
-        <div class="hcard-num" id="h-dias"><span class="sk">&nbsp;&nbsp;</span></div>
-        <div class="hcard-lbl">dias restantes</div>
+  <!-- HERO CARD -->
+  <div class="hero-wrap">
+    <a class="hero-card" href="https://rc-japao.vercel.app/" id="hero-japao">
+      <div class="hero-left">
+        <div class="hero-live">
+          <span class="hero-live-dot"></span>ao vivo
+        </div>
+        <span class="hero-emoji">🇯🇵</span>
+        <div class="hero-title">Japão 2026</div>
+        <div class="hero-sub">27 jun – 16 jul · família Coelho · QR780</div>
+      </div>
+      <div class="hero-right">
+        <div class="hero-num" id="hero-dias"><span class="sk" style="width:64px"></span></div>
+        <div class="hero-unit">dias</div>
       </div>
     </a>
+  </div>
 
-    <a class="hcard hcard-cfg" href="https://rc-cfg.vercel.app/">
-      <div class="hcard-badge"><span class="live-dot"></span>Ao vivo</div>
-      <div class="hcard-emoji">📊</div>
-      <div class="hcard-title">CFG App</div>
-      <div class="hcard-sub">Preparação ANBIMA · streak atual</div>
-      <div class="hcard-stat">
-        <div class="hcard-num" id="h-streak"><span class="sk">&nbsp;&nbsp;</span></div>
-        <div class="hcard-lbl">dias de streak</div>
-      </div>
+  <!-- SECONDARY STRIP -->
+  <div class="sec-strip">
+
+    <a class="sec-card cfg" href="https://rc-cfg.vercel.app/">
+      <div class="sec-emoji">📊</div>
+      <div class="sec-name">CFG App</div>
+      <div class="sec-stat" id="sec-streak"><span class="sk" style="width:32px"></span></div>
+      <div class="sec-lbl">dias streak</div>
+    </a>
+
+    <a class="sec-card fatura" href="https://rc-cartao.vercel.app/">
+      <div class="sec-emoji">💳</div>
+      <div class="sec-name">Fatura XP</div>
+      <div class="sec-stat" id="sec-fatura"><span class="sk" style="width:32px"></span></div>
+      <div class="sec-lbl">dias p/ fechar</div>
+    </a>
+
+    <a class="sec-card" href="https://rc-financas.vercel.app/" style="border-color:rgba(59,130,246,.25)">
+      <div class="sec-emoji">📈</div>
+      <div class="sec-name">RC Finanças</div>
+      <div class="sec-stat" style="color:#60a5fa;font-size:1rem;font-weight:700;padding-top:10px">2043</div>
+      <div class="sec-lbl">horizonte</div>
     </a>
 
   </div>
@@ -537,11 +453,7 @@
   </div>
 
   <!-- APPS -->
-  <div class="sh">
-    <h2>Apps</h2>
-    <span class="count" id="app-count"></span>
-  </div>
-
+  <div class="sec-label" id="app-count-label">Todos os apps</div>
   <div class="app-grid" id="app-grid">
 
     <!-- ── FINANÇAS ── -->
@@ -739,7 +651,10 @@
 
     <div class="empty" id="empty" style="display:none">Nenhum app encontrado.</div>
 
+  
+    <div class="empty" id="empty" style="display:none">Nenhum app encontrado.</div>
   </div>
+
 </div>
 
 <!-- BOTTOM NAV -->
@@ -808,38 +723,62 @@
 <script>
 if ('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js')
 
-// ── Visible app counter helper ────────────────────
+// ── Header date ───────────────────────────────────
+function updateHeaderDate(diasJapao) {
+  const dias = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb']
+  const meses = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez']
+  const now = new Date()
+  const el = document.getElementById('header-date')
+  if (!el) return
+  const base = `${dias[now.getDay()]}, ${now.getDate()} ${meses[now.getMonth()]}`
+  el.textContent = diasJapao != null ? `${base} · ${diasJapao}d para o Japão ✈️` : base
+}
+
+// ── Contagem de apps ──────────────────────────────
 function updateCount() {
   const visible = document.querySelectorAll('.app:not(.hidden)').length
-  const total = document.querySelectorAll('.app').length
-  const el = document.getElementById('app-count')
-  if (el) el.textContent = visible === total ? `${total} apps` : `${visible} de ${total}`
+  const total   = document.querySelectorAll('.app').length
+  const lbl = document.getElementById('app-count-label')
+  if (lbl) lbl.textContent = visible === total ? `${total} apps` : `${visible} de ${total}`
   document.getElementById('empty').style.display = visible === 0 ? 'block' : 'none'
   document.getElementById('s-apps').textContent = total
 }
 
-// ── Search ────────────────────────────────────────
-document.getElementById('srch').addEventListener('input', function() {
-  const q = this.value.toLowerCase().trim()
-  document.querySelectorAll('.app').forEach(c => {
-    const txt = ((c.dataset.tags||'') + ' ' + (c.querySelector('.app-name')?.textContent||'')).toLowerCase()
-    c.classList.toggle('hidden', q !== '' && !txt.includes(q))
+function buildPillCounts() {
+  const apps = document.querySelectorAll('.app')
+  const counts = {}
+  let total = 0
+  apps.forEach(a => { const c = a.dataset.cat; if(c) counts[c]=(counts[c]||0)+1; total++ })
+  document.querySelectorAll('.pill-count').forEach(el => {
+    const cat = el.dataset.cat
+    el.textContent = cat === 'all' ? total : (counts[cat]||0)
   })
-  // also drop active filter when searching
-  if (q !== '') {
-    document.querySelectorAll('.cat-pill').forEach(p => p.classList.remove('active'))
-  } else if (!document.querySelector('.cat-pill.active')) {
-    document.querySelector('.cat-pill').classList.add('active')
-  }
-  updateCount()
+}
+
+// ── Search ────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  const srch = document.getElementById('srch')
+  if (srch) srch.addEventListener('input', function() {
+    const q = this.value.toLowerCase().trim()
+    document.querySelectorAll('.app').forEach(c => {
+      const txt = ((c.dataset.tags||'') + ' ' + (c.querySelector('.app-name')?.textContent||''\)).toLowerCase()
+      c.classList.toggle('hidden', q !== '' && !txt.includes(q))
+    })
+    if (q !== '') {
+      document.querySelectorAll('.cat-pill').forEach(p => p.classList.remove('active'))
+    } else if (!document.querySelector('.cat-pill.active')) {
+      document.querySelector('.cat-pill').classList.add('active')
+    }
+    updateCount()
+  })
 })
 
 // ── Filter ────────────────────────────────────────
 function filter(cat, el) {
   document.querySelectorAll('.cat-pill').forEach(p => p.classList.remove('active'))
   el.classList.add('active')
-  // clear search box too
-  document.getElementById('srch').value = ''
+  const srch = document.getElementById('srch')
+  if (srch) srch.value = ''
   document.querySelectorAll('.app').forEach(c => {
     c.classList.toggle('hidden', cat !== 'all' && c.dataset.cat !== cat)
   })
@@ -855,15 +794,17 @@ function goHub() {
   setNav('n-hub')
   document.querySelectorAll('.cat-pill').forEach(p => p.classList.remove('active'))
   document.querySelector('.cat-pill').classList.add('active')
-  document.getElementById('srch').value = ''
+  const srch = document.getElementById('srch')
+  if (srch) srch.value = ''
   document.querySelectorAll('.app').forEach(c => c.classList.remove('hidden'))
   updateCount()
   window.scrollTo({top:0,behavior:'smooth'})
 }
 function goSearch() {
   setNav('n-search')
-  window.scrollTo({top:0,behavior:'smooth'})
-  setTimeout(()=>document.getElementById('srch').focus(),300)
+  // mostrar search temporariamente
+  const sw = document.querySelector('.search')
+  if (sw) { sw.style.display = 'block'; window.scrollTo({top:0,behavior:'smooth'}); setTimeout(()=>document.getElementById('srch')?.focus(),300) }
 }
 function goApps() {
   setNav('n-apps')
@@ -880,8 +821,26 @@ function closeSheet() {
   setNav('n-hub')
 }
 
-// ── Live data ─────────────────────────────────────
+// ── Helpers ───────────────────────────────────────
 function set(id, html) { const el=document.getElementById(id); if(el) el.innerHTML=html }
+function daysBetween(a,b) { return Math.max(0,Math.ceil((b-a)/86400000)) }
+
+// ── Hero / data ao vivo ───────────────────────────
+function renderHero() {
+  const today  = new Date(); today.setHours(0,0,0,0)
+  const japao  = new Date('2026-06-27')
+  const dJapao = daysBetween(today, japao)
+
+  set('hero-dias', dJapao > 0 ? dJapao : '✈')
+  set('s-dias', dJapao)
+  updateHeaderDate(dJapao > 0 ? dJapao : 0)
+
+  // Fatura XP fecha dia 13
+  let fech = new Date(today.getFullYear(), today.getMonth(), 13)
+  if (fech <= today) fech = new Date(today.getFullYear(), today.getMonth()+1, 13)
+  const dFat = daysBetween(today, fech)
+  set('sec-fatura', dFat)
+}
 
 async function loadData(force=false) {
   const btn = document.getElementById('rbtn')
@@ -889,107 +848,39 @@ async function loadData(force=false) {
   try {
     const r = await fetch(force ? `/api/hub-data?t=${Date.now()}` : '/api/hub-data')
     const d = await r.json()
-
-    // Japão
-    if (d.japao) {
-      const dias = d.japao.diasRestantes
-      set('x-dias', dias)
-      set('s-dias', dias)
-    }
-
-    // TCU
-    set('x-fgts', d.tcuFgts?.total != null ? d.tcuFgts.total : '—')
-
-    // CFG
-    if (d.cfg) {
-      set('x-streak', d.cfg.streakDias)
-      set('h-streak', d.cfg.streakDias)
-    } else {
-      set('x-streak', '—')
-      set('h-streak', '—')
-    }
-
+    if (d.cfg) set('sec-streak', d.cfg.streakDias)
+    else set('sec-streak','—')
   } catch(e) {
     console.warn(e)
-    set('x-streak','—'); set('x-dias','—'); set('x-fgts','—')
+    set('sec-streak','—')
   } finally {
     btn.classList.remove('spin')
   }
 }
 
-// ── Hero contextual (hardcoded V1) ────────────────
-function daysBetween(a, b) {
-  const ms = b.getTime() - a.getTime()
-  return Math.ceil(ms / 86400000)
-}
-function renderHero() {
-  const today = new Date(); today.setHours(0,0,0,0)
-
-  // 1. Japão — embarque 27/jun/2026 (QR780)
-  const japao = new Date(2026, 5, 27)
-  const dJapao = daysBetween(today, japao)
-  const elJ = document.getElementById('hctx-japao-d')
-  if (elJ) elJ.textContent = dJapao > 0 ? `${dJapao} dias` : (dJapao === 0 ? 'hoje' : 'embarcou')
-  const elHD = document.getElementById('h-dias')
-  if (elHD) elHD.textContent = dJapao > 0 ? dJapao : 0
-  updateHeaderSub(dJapao > 0 ? dJapao : 0)
-  const pillJ = document.getElementById('hctx-japao-pill')
-  if (pillJ) {
-    pillJ.classList.remove('green','amber','red')
-    if (dJapao > 30) { pillJ.classList.add('green'); pillJ.textContent = 'no prazo' }
-    else if (dJapao >= 7) { pillJ.classList.add('amber'); pillJ.textContent = 'atenção' }
-    else { pillJ.classList.add('red'); pillJ.textContent = 'urgente' }
-  }
-
-  // 3. Fatura XP fecha dia 13 do mês (próximo 13)
-  let fech = new Date(today.getFullYear(), today.getMonth(), 13)
-  if (fech <= today) fech = new Date(today.getFullYear(), today.getMonth()+1, 13)
-  const dFat = daysBetween(today, fech)
-  const elF = document.getElementById('hctx-fatura-d')
-  if (elF) elF.textContent = `${dFat} dias`
-
-}
-
-// Quick actions não devem propagar pro link pai (ainda sem deeplink real)
-document.querySelectorAll('.app-quick').forEach(q => {
-  q.addEventListener('click', e => { /* deixa propagar — abre o app */ })
+// ── SEARCH INPUT (oculto, ativado pelo nav) ────────
+document.body.insertAdjacentHTML('beforeend',
+  '<div class="search" id="search-overlay" style="display:none;position:fixed;top:0;left:0;right:0;z-index:80;padding:calc(16px + var(--safe-top)) 16px 12px;background:rgba(8,11,20,.95);backdrop-filter:blur(20px)">' +
+  '<input id="srch" type="search" placeholder="Buscar app ou categoria…" autocomplete="off" style="width:100%;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:14px;padding:13px 16px;color:#f0f4ff;font-size:.9rem;font-family:Inter,sans-serif;outline:none"></div>'
+)
+document.getElementById('srch')?.addEventListener('keydown', e => {
+  if (e.key === 'Escape') { document.getElementById('search-overlay').style.display='none'; setNav('n-hub') }
 })
-
-
-// ── Pill counts ──────────────────────────────────────
-function buildPillCounts() {
-  const apps = document.querySelectorAll('.app')
-  const counts = {}
-  let total = 0
-  apps.forEach(a => {
-    const cat = a.dataset.cat
-    if (cat) counts[cat] = (counts[cat] || 0) + 1
-    total++
-  })
-  document.querySelectorAll('.pill-count').forEach(el => {
-    const cat = el.dataset.cat
-    el.textContent = cat === 'all' ? total : (counts[cat] || 0)
-  })
+function goSearch() {
+  setNav('n-search')
+  const sw = document.getElementById('search-overlay')
+  sw.style.display = 'block'
+  setTimeout(()=>document.getElementById('srch')?.focus(),150)
 }
 
-// ── Header sub dinâmico ──────────────────────────────
-function updateHeaderSub(diasJapao) {
-  const dias = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb']
-  const meses = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez']
-  const now = new Date()
-  const el = document.getElementById('header-sub')
-  if (!el) return
-  const base = `${dias[now.getDay()]}, ${now.getDate()} ${meses[now.getMonth()]}`
-  el.textContent = diasJapao != null ? `${base} · ${diasJapao}d para o Japão ✈️` : base
-}
-
-// initial paint
+// ── Init ──────────────────────────────────────────
+updateHeaderDate(null)
 buildPillCounts()
-renderHero()
 updateCount()
+renderHero()
 loadData()
-setInterval(loadData, 5*60*1000)
 setInterval(renderHero, 60*60*1000)
+setInterval(loadData, 5*60*1000)
 </script>
 </body>
 </html>
