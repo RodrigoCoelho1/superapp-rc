@@ -256,28 +256,6 @@
     .hctx-row .pill.red{background:rgba(244,63,94,.22);color:#fda4af}
 
     /* ── FAVORITOS ────────────────────────────────── */
-    .fav-grid{padding:0 22px;display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:4px}
-    .fav{
-      position:relative;overflow:hidden;
-      min-height:135px;border-radius:22px;padding:16px;
-      display:flex;flex-direction:column;
-      text-decoration:none;color:#fff;
-      border:1px solid rgba(255,255,255,.18);
-      cursor:pointer;-webkit-tap-highlight-color:transparent;
-      transition:transform .15s;
-    }
-    .fav:active{transform:scale(.96)}
-    .fav.f1{background:linear-gradient(135deg,#4f46e5,#7c3aed)}
-    .fav.f2{background:linear-gradient(135deg,#0ea5e9,#06b6d4)}
-    .fav-emoji{font-size:1.9rem;line-height:1;filter:drop-shadow(0 2px 6px rgba(0,0,0,.3))}
-    .fav-name{font-size:1.02rem;font-weight:800;margin-top:8px;letter-spacing:-.02em}
-    .fav-stat{margin-top:auto;font-size:.72rem;opacity:.9;font-weight:500;padding-top:8px}
-    .fav-badge{
-      position:absolute;top:14px;right:14px;
-      background:rgba(255,255,255,.18);backdrop-filter:blur(8px);
-      border-radius:99px;padding:4px 10px;
-      font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;
-    }
 
     /* ── BADGE DE ATIVIDADE ───────────────────────── */
     .app-badge{
@@ -406,6 +384,63 @@
     }
     .refresh-btn.spin{animation:rspin .7s linear infinite}
     @keyframes rspin{to{transform:rotate(360deg)}}
+
+    /* ── HIGHLIGHT CARDS (Destaques) ──────────── */
+    .highlight-grid{
+      padding:0 22px;
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+      margin-bottom:4px;
+    }
+    @media(max-width:360px){.highlight-grid{grid-template-columns:1fr}}
+
+    .hcard{
+      position:relative;overflow:hidden;
+      border-radius:22px;
+      padding:16px;
+      display:flex;flex-direction:column;
+      text-decoration:none;color:var(--text);
+      cursor:pointer;-webkit-tap-highlight-color:transparent;
+      backdrop-filter:blur(12px);
+      transition:transform .15s,border-color .2s;
+      min-height:140px;
+    }
+    .hcard:active{transform:scale(.97)}
+    .hcard-japao{
+      background:linear-gradient(135deg,rgba(167,139,250,.16) 0%,rgba(79,142,247,.08) 100%);
+      border:1px solid rgba(167,139,250,.35);
+    }
+    .hcard-cfg{
+      background:linear-gradient(135deg,rgba(34,197,94,.13) 0%,rgba(6,182,212,.07) 100%);
+      border:1px solid rgba(34,197,94,.3);
+    }
+    .hcard::before{content:'';position:absolute;inset:0;pointer-events:none;
+      background:linear-gradient(135deg,rgba(255,255,255,.04) 0%,transparent 60%);}
+    .hcard-badge{
+      font-size:.6rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+      color:var(--muted2);margin-bottom:8px;
+      display:flex;align-items:center;gap:5px;
+    }
+    .hcard-badge .live-dot{margin:0}
+    .hcard-emoji{font-size:1.5rem;line-height:1;margin-bottom:8px}
+    .hcard-title{font-size:.95rem;font-weight:800;letter-spacing:-.01em;line-height:1.2}
+    .hcard-sub{font-size:.67rem;color:var(--muted);margin-top:3px;line-height:1.4}
+    .hcard-stat{margin-top:auto;padding-top:10px}
+    .hcard-num{font-size:1.75rem;font-weight:800;letter-spacing:-.04em;line-height:1;color:#f0f4ff}
+    .hcard-cfg .hcard-num{color:#22c55e}
+    .hcard-lbl{font-size:.58rem;color:var(--muted);text-transform:uppercase;
+      letter-spacing:.06em;font-weight:600;margin-top:3px;}
+
+    /* ── PILL COUNT ─────────────────────────────── */
+    .pill-count{
+      font-size:.62rem;font-weight:700;
+      background:rgba(255,255,255,.08);
+      border-radius:99px;padding:1px 6px;
+      color:var(--muted);margin-left:2px;
+    }
+    .cat-pill.active .pill-count{background:rgba(79,142,247,.2);color:var(--accent)}
+
   </style>
 </head>
 <body>
@@ -458,34 +493,46 @@
     <input id="srch" type="search" placeholder="Buscar app, categoria…" autocomplete="off"/>
   </div>
 
-  <!-- FAVORITOS -->
-  <div class="sh" style="padding:4px 22px 12px"><h2>⭐ Favoritos</h2><span class="count">2 fixados</span></div>
-  <div class="fav-grid">
-    <a class="fav f1" href="https://rc-japao.vercel.app/">
-      <span class="fav-emoji">🇯🇵</span>
-      <div class="fav-name">Japão 2026</div>
-      <div class="fav-stat" id="fav-japao-stat">— · família Coelho</div>
-      <span class="fav-badge">🔥 hot</span>
+
+  <!-- DESTAQUES -->
+  <div class="sh" style="padding:4px 22px 12px"><h2>Destaques</h2></div>
+  <div class="highlight-grid">
+
+    <a class="hcard hcard-japao" href="https://rc-japao.vercel.app/">
+      <div class="hcard-badge"><span class="live-dot"></span>Ao vivo</div>
+      <div class="hcard-emoji">🇯🇵</div>
+      <div class="hcard-title">Japão 2026</div>
+      <div class="hcard-sub">27 jun – 16 jul · família Coelho</div>
+      <div class="hcard-stat">
+        <div class="hcard-num" id="h-dias"><span class="sk">&nbsp;&nbsp;</span></div>
+        <div class="hcard-lbl">dias restantes</div>
+      </div>
     </a>
-    <a class="fav f2" href="https://rc-cartao.vercel.app/">
-      <span class="fav-emoji">💳</span>
-      <div class="fav-name">Cartão XP</div>
-      <div class="fav-stat" id="fav-cartao-stat">fecha em —</div>
-      <span class="fav-badge">3 novos</span>
+
+    <a class="hcard hcard-cfg" href="https://rc-cfg.vercel.app/">
+      <div class="hcard-badge"><span class="live-dot"></span>Ao vivo</div>
+      <div class="hcard-emoji">📊</div>
+      <div class="hcard-title">CFG App</div>
+      <div class="hcard-sub">Preparação ANBIMA · streak atual</div>
+      <div class="hcard-stat">
+        <div class="hcard-num" id="h-streak"><span class="sk">&nbsp;&nbsp;</span></div>
+        <div class="hcard-lbl">dias de streak</div>
+      </div>
     </a>
+
   </div>
 
   <!-- CATEGORIAS -->
   <div class="cats-wrap">
     <div class="cats">
-      <div class="cat-pill active" onclick="filter('all',this)"><span class="e">🏠</span>Todos</div>
-      <div class="cat-pill" onclick="filter('financas',this)"><span class="e">📊</span>Finanças</div>
-      <div class="cat-pill" onclick="filter('viagem',this)"><span class="e">✈️</span>Viagem</div>
-      <div class="cat-pill" onclick="filter('info',this)"><span class="e">📰</span>Notícias</div>
-      <div class="cat-pill" onclick="filter('tcu',this)"><span class="e">⚖️</span>TCU</div>
-      <div class="cat-pill" onclick="filter('prod',this)"><span class="e">✅</span>Produtividade</div>
-      <div class="cat-pill" onclick="filter('foto',this)"><span class="e">📷</span>Fotografia</div>
-      <div class="cat-pill" onclick="filter('cultura',this)"><span class="e">🚀</span>Cultura</div>
+      <div class="cat-pill active" onclick="filter('all',this)"><span class="e">🏠</span>Todos<span class="pill-count" data-cat="all"></span></div>
+      <div class="cat-pill" onclick="filter('financas',this)"><span class="e">📊</span>Finanças<span class="pill-count" data-cat="financas"></span></div>
+      <div class="cat-pill" onclick="filter('viagem',this)"><span class="e">✈️</span>Viagem<span class="pill-count" data-cat="viagem"></span></div>
+      <div class="cat-pill" onclick="filter('info',this)"><span class="e">📰</span>Notícias<span class="pill-count" data-cat="info"></span></div>
+      <div class="cat-pill" onclick="filter('tcu',this)"><span class="e">⚖️</span>TCU<span class="pill-count" data-cat="tcu"></span></div>
+      <div class="cat-pill" onclick="filter('prod',this)"><span class="e">✅</span>Produtividade<span class="pill-count" data-cat="prod"></span></div>
+      <div class="cat-pill" onclick="filter('foto',this)"><span class="e">📷</span>Fotografia<span class="pill-count" data-cat="foto"></span></div>
+      <div class="cat-pill" onclick="filter('cultura',this)"><span class="e">🚀</span>Cultura<span class="pill-count" data-cat="cultura"></span></div>
     </div>
   </div>
 
@@ -856,8 +903,10 @@ async function loadData(force=false) {
     // CFG
     if (d.cfg) {
       set('x-streak', d.cfg.streakDias)
+      set('h-streak', d.cfg.streakDias)
     } else {
       set('x-streak', '—')
+      set('h-streak', '—')
     }
 
   } catch(e) {
@@ -881,6 +930,9 @@ function renderHero() {
   const dJapao = daysBetween(today, japao)
   const elJ = document.getElementById('hctx-japao-d')
   if (elJ) elJ.textContent = dJapao > 0 ? `${dJapao} dias` : (dJapao === 0 ? 'hoje' : 'embarcou')
+  const elHD = document.getElementById('h-dias')
+  if (elHD) elHD.textContent = dJapao > 0 ? dJapao : 0
+  updateHeaderSub(dJapao > 0 ? dJapao : 0)
   const pillJ = document.getElementById('hctx-japao-pill')
   if (pillJ) {
     pillJ.classList.remove('green','amber','red')
@@ -896,14 +948,6 @@ function renderHero() {
   const elF = document.getElementById('hctx-fatura-d')
   if (elF) elF.textContent = `${dFat} dias`
 
-  // Favoritos sync
-  const favJ = document.getElementById('fav-japao-stat')
-  if (favJ) favJ.textContent = `${dJapao} dias · 4 ingressos pendentes`
-  const favC = document.getElementById('fav-cartao-stat')
-  if (favC) {
-    const meses = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez']
-    favC.textContent = `R$ 3.4k · fecha 13/${meses[fech.getMonth()]}`
-  }
 }
 
 // Quick actions não devem propagar pro link pai (ainda sem deeplink real)
@@ -911,7 +955,36 @@ document.querySelectorAll('.app-quick').forEach(q => {
   q.addEventListener('click', e => { /* deixa propagar — abre o app */ })
 })
 
+
+// ── Pill counts ──────────────────────────────────────
+function buildPillCounts() {
+  const apps = document.querySelectorAll('.app')
+  const counts = {}
+  let total = 0
+  apps.forEach(a => {
+    const cat = a.dataset.cat
+    if (cat) counts[cat] = (counts[cat] || 0) + 1
+    total++
+  })
+  document.querySelectorAll('.pill-count').forEach(el => {
+    const cat = el.dataset.cat
+    el.textContent = cat === 'all' ? total : (counts[cat] || 0)
+  })
+}
+
+// ── Header sub dinâmico ──────────────────────────────
+function updateHeaderSub(diasJapao) {
+  const dias = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb']
+  const meses = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez']
+  const now = new Date()
+  const el = document.getElementById('header-sub')
+  if (!el) return
+  const base = `${dias[now.getDay()]}, ${now.getDate()} ${meses[now.getMonth()]}`
+  el.textContent = diasJapao != null ? `${base} · ${diasJapao}d para o Japão ✈️` : base
+}
+
 // initial paint
+buildPillCounts()
 renderHero()
 updateCount()
 loadData()
