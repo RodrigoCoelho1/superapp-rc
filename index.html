@@ -406,7 +406,7 @@
         <div class="hero-sub">27 jun – 16 jul · família Coelho · QR780</div>
       </div>
       <div class="hero-right">
-        <div class="hero-num" id="hero-dias"><span class="sk" style="width:64px"></span></div>
+        <div class="hero-num" id="hero-dias"><script>document.write(Math.max(0,Math.ceil((+new Date('2026-06-27')- +new Date())/864e5)))<\/script></div>
         <div class="hero-unit">dias</div>
       </div>
     </a>
@@ -425,7 +425,7 @@
     <a class="sec-card fatura" href="https://rc-cartao.vercel.app/">
       <div class="sec-emoji">💳</div>
       <div class="sec-name">Fatura XP</div>
-      <div class="sec-stat" id="sec-fatura"><span class="sk" style="width:32px"></span></div>
+      <div class="sec-stat" id="sec-fatura"><script>var _f=new Date();var _fd=new Date(_f.getFullYear(),_f.getMonth(),13);if(_fd<=_f)_fd=new Date(_f.getFullYear(),_f.getMonth()+1,13);document.write(Math.max(0,Math.ceil((_fd-_f)/864e5)))<\/script></div>
       <div class="sec-lbl">dias p/ fechar</div>
     </a>
 
@@ -859,20 +859,6 @@ async function loadData(force=false) {
 }
 
 // ── SEARCH INPUT (oculto, ativado pelo nav) ────────
-document.body.insertAdjacentHTML('beforeend',
-  '<div class="search" id="search-overlay" style="display:none;position:fixed;top:0;left:0;right:0;z-index:80;padding:calc(16px + var(--safe-top)) 16px 12px;background:rgba(8,11,20,.95);backdrop-filter:blur(20px)">' +
-  '<input id="srch" type="search" placeholder="Buscar app ou categoria…" autocomplete="off" style="width:100%;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:14px;padding:13px 16px;color:#f0f4ff;font-size:.9rem;font-family:Inter,sans-serif;outline:none"></div>'
-)
-document.getElementById('srch')?.addEventListener('keydown', e => {
-  if (e.key === 'Escape') { document.getElementById('search-overlay').style.display='none'; setNav('n-hub') }
-})
-function goSearch() {
-  setNav('n-search')
-  const sw = document.getElementById('search-overlay')
-  sw.style.display = 'block'
-  setTimeout(()=>document.getElementById('srch')?.focus(),150)
-}
-
 // ── Init ──────────────────────────────────────────
 updateHeaderDate(null)
 buildPillCounts()
