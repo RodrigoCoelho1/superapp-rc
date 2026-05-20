@@ -4,8 +4,7 @@ module.exports = async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*')
   res.setHeader('Cache-Control', 's-maxage=60, stale-while-revalidate=120')
 
-  const [cfg, tcuFgts] = await Promise.allSettled([
-    fetchCfg(),
+  const [tcuFgts] = await Promise.allSettled([
     fetchTcuCount('https://rc-tcu.vercel.app/'),
   ])
 
@@ -14,28 +13,10 @@ module.exports = async function handler(req, res) {
 
   res.json({
     geradoEm:  new Date().toISOString(),
-    cfg:       cfg.status     === 'fulfilled' ? cfg.value     : null,
     tcuFgts:   tcuFgts.status === 'fulfilled' ? tcuFgts.value : null,
     japao:     { diasRestantes: diasParaJapao, dataPartida: '27/06/2026' },
     instantes: { totalFotos: 3485, albuns: 44 },
   })
-}
-
-async function fetchCfg() {
-  const r = await fetch('https://rc-cfg.vercel.app/api/diagnostico')
-  const d = await r.json()
-  const totalRespondidas = d.stats.reduce((s, m) => s + m.totalRespondidas, 0)
-  const modulos = d.stats.map(m => ({
-    codigo: m.modulo, acerto: Math.round(m.acertoPct * 100), status: m.status,
-  }))
-  const melhorModulo = [...modulos].filter(m => m.acerto > 0).sort((a,b) => b.acerto - a.acerto)[0]
-  return {
-    streakDias: d.streakDias,
-    totalRespondidas,
-    melhorModulo,
-    modulosCriticos: modulos.filter(m => m.status === 'Vermelho').length,
-    totalModulos: modulos.length,
-  }
 }
 
 async function fetchTcuCount(url) {

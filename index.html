@@ -186,7 +186,6 @@
     }
     .sec-lbl{font-size:.58rem;color:var(--muted);text-transform:uppercase;
       letter-spacing:.06em;font-weight:600;margin-top:2px;}
-    .sec-card.cfg .sec-stat{color:#22c55e}
     .sec-card.fatura .sec-stat{color:#f59e0b}
 
     /* ── CATEGORIES ───────────────────────────────── */
@@ -415,13 +414,6 @@
   <!-- SECONDARY STRIP -->
   <div class="sec-strip">
 
-    <a class="sec-card cfg" href="https://rc-cfg.vercel.app/">
-      <div class="sec-emoji">📊</div>
-      <div class="sec-name">CFG App</div>
-      <div class="sec-stat" id="sec-streak"><span class="sk" style="width:32px"></span></div>
-      <div class="sec-lbl">dias streak</div>
-    </a>
-
     <a class="sec-card fatura" href="https://rc-cartao.vercel.app/">
       <div class="sec-emoji">💳</div>
       <div class="sec-name">Fatura XP</div>
@@ -486,20 +478,6 @@
       </div>
     </a>
 
-    <a class="app" href="https://rc-cfg.vercel.app/" data-cat="financas"
-       data-tags="cfg finanças anbima módulos questões streak relatório diagnóstico">
-      <div class="app-top">
-        <div class="app-emoji">📊</div>
-        <span class="app-badge dot-red" title="atenção · 10 dias sem estudar"></span>
-      </div>
-      <div class="app-name">CFG App</div>
-      <div class="app-sub">Preparação ANBIMA · módulos</div>
-      <div class="app-stat">
-        <span class="app-stat-num" id="x-streak"><span class="sk">&nbsp;</span></span>
-        <span class="app-stat-lbl">streak · dias</span>
-      </div>
-      <div class="app-quick">▶ quiz rápido</div>
-    </a>
 
     <a class="app" href="https://rc-cartao.vercel.app/" data-cat="financas"
        data-tags="fatura cartão xp crédito pdf finanças">
@@ -713,8 +691,7 @@
     <div class="sheet-info">
       🏢 CAIXA · Brasília<br>
       📷 Fotógrafo amador<br>
-      ✈️ Japão em Jun 2026<br>
-      📚 Preparação CFG ANBIMA
+      ✈️ Japão em Jun 2026
     </div>
     <button class="sheet-close" onclick="closeSheet()">Fechar</button>
   </div>
@@ -848,8 +825,6 @@ async function loadData(force=false) {
   try {
     const r = await fetch(force ? `/api/hub-data?t=${Date.now()}` : '/api/hub-data')
     const d = await r.json()
-    if (d.cfg) set('sec-streak', d.cfg.streakDias)
-    else set('sec-streak','—')
   } catch(e) {
     console.warn(e)
     set('sec-streak','—')
